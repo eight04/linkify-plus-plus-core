@@ -127,5 +127,7 @@ TLD count is grabbed from <http://research.domaintools.com/statistics/tld-counts
 
 Changelog
 ---------
-* Version 0.1.0:
+
+* Version 0.1.0 (Feb 23, 2017):
+
   - First release
