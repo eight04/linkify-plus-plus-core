@@ -2,6 +2,10 @@ Linkify Plus Plus Core
 ======================
 A JavaScript library for linkification stuff. Used by [linkify-plus-plus](https://github.com/eight04/linkify-plus-plus).
 
+Demo
+----
+https://rawgit.com/eight04/linkify-plus-plus-core/master/demo/demo.html
+
 Features
 --------
 This module exports 2 classes.
@@ -63,10 +67,7 @@ The options object, all properties are optional:
 * options.fuzzyIp: boolean, default:true - match 4 digits IP, which often looks like version numbers.
 * options.ignoreMustache: boolean, default:false - ignore links inside mustache "{{", "}}". This is useful to work with other template library like Vue.js.
 * options.unicode: boolean, default:false - match unicode character.
-* options.customRules: array of string, default:[] - a list of regex pattern (in string). E.g.
-  ```
-  ["file:///\\S+", "magnet:\\?\\S+"]
-  ```
+* options.customRules: array of string, default:[] - a list of regex pattern (in string). E.g. `["file:///\\S+", "magnet:\\?\\S+"]`
 * options.standalone: boolean, default:false - the link must be surrounded by whitespace.
 * options.boundaryLeft: string - works with `standalone` option. Allow some characters to be placed between whitespace and link. Some common characters are `{[("'`.
 * options.boundaryRight: string - works with `standalone` option. Allow some characters to be placed between whitespace and link. Some common characters are `'")]},.;?!`.
