@@ -1,0 +1,39 @@
+{
+  "name": "linkify-plus-plus-core",
+  "version": "0.0.0",
+  "description": "A JavaScript library for linkification stuff",
+  "keywords": [
+    "linkify"
+  ],
+  "homepage": "https://github.com/eight04/linkify-plus-plus-core",
+  "bugs": {
+    "url": "https://github.com/eight04/linkify-plus-plus-core/issues",
+    "email": "eight04@gmail.com"
+  },
+  "license": "SEE LICENSE IN LICENSE",
+  "author": "eight <eight04@gmail.com>",
+  "main": "index.js",
+  "repository": "eight04/linkify-plus-plus-core",
+  "devDependencies": {
+    "babel-cli": "^6.23.0",
+    "babel-plugin-transform-es2015-block-scoping": "^6.23.0",
+    "babel-plugin-transform-es2015-classes": "^6.23.0",
+    "babel-plugin-transform-es2015-destructuring": "^6.23.0",
+    "babel-plugin-transform-es2015-parameters": "^6.23.0",
+    "babelify": "^7.3.0",
+    "browserify": "^14.1.0",
+    "cheerio": "^0.22.0",
+    "mocha": "^3.2.0",
+    "npm-build-tools": "^2.2.5",
+    "request": "^2.79.0"
+  },
+  "scripts": {
+    "build-tlds": "node build-tlds.js | n-pipe lib/tlds.json",
+    "build": "browserify -r ./index.js:linkify-plus-plus-core -t babelify | n-pipe dist/linkify-plus-plus-core.js",
+    "test": "eslint **/*.js && mocha",
+    "preversion": "npm test",
+    "version": "npm run build && git add .",
+    "postversion": "git push --follow-tags && npm publish",
+    "watch": "n-run -w lib/*.js \"npm run build\""
+  }
+}

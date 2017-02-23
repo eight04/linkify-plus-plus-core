@@ -1,0 +1,47 @@
+<!doctype html>
+<html>
+<head>
+	<meta charset="UTF-8">
+	<title>Linkify Plus Plus Core</title>
+	<link rel="stylesheet" href="https://rawgit.com/eight04/end2end/master/dist/end2end.css">
+	<link rel="stylesheet" href="style.css">
+	<script src="https://unpkg.com/vue/dist/vue.js"></script>
+	<script src="../dist/linkify-plus-plus-core.js"></script>
+</head>
+<body>
+	<div class="container main">
+		<h2>Linkify Plus Plus Core Demo</h2>
+		<label class="checkbox">
+			<input type="checkbox" v-model="options.fuzzyIp">
+			fuzzyIp
+		</label>
+		<label class="checkbox">
+			<input type="checkbox" v-model="options.ignoreMustache">
+			ignoreMustache
+		</label>
+		<label class="checkbox">
+			<input type="checkbox" v-model="options.unicode">
+			unicode
+		</label>
+		<label class="checkbox">
+			<input type="checkbox" v-model="options.newTab">
+			newTab
+		</label>
+		<label class="checkbox">
+			<input type="checkbox" v-model="options.embedImage">
+			embedImage
+		</label>
+		<div class="row">
+			<div class="col-xs-1-2">
+				<p>Input:</p>
+				<textarea id="input" v-model="text" class="form-control"></textarea>
+			</div>
+			<div class="col-xs-1-2">
+				<p>Output:</p>
+				<pre class="code"><code id="output"></code></pre>
+			</div>
+		</div>
+	</div>
+	<script src="script.js"></script>
+</body>
+</html>
