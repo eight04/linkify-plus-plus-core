@@ -29,7 +29,7 @@
   },
   "scripts": {
     "build-tlds": "node build-tlds.js | n-pipe lib/tlds.json",
-    "build": "browserify -r ./index.js:linkify-plus-plus-core -t babelify | n-pipe dist/linkify-plus-plus-core.js",
+    "build": "browserify index.js --standalone linkifyPlusPlusCore -t babelify | n-pipe dist/linkify-plus-plus-core.js",
     "test": "eslint **/*.js && mocha",
     "preversion": "npm test",
     "version": "npm run build && git add .",

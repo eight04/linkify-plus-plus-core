@@ -1,4 +1,17 @@
-require=(function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof require=="function"&&require;if(!u&&a)return a(o,!0);if(i)return i(o,!0);var f=new Error("Cannot find module '"+o+"'");throw f.code="MODULE_NOT_FOUND",f}var l=n[o]={exports:{}};t[o][0].call(l.exports,function(e){var n=t[o][1][e];return s(n?n:e)},l,l.exports,e,t,n,r)}return n[o].exports}var i=typeof require=="function"&&require;for(var o=0;o<r.length;o++)s(r[o]);return s})({1:[function(require,module,exports){
+(function(f){if(typeof exports==="object"&&typeof module!=="undefined"){module.exports=f()}else if(typeof define==="function"&&define.amd){define([],f)}else{var g;if(typeof window!=="undefined"){g=window}else if(typeof global!=="undefined"){g=global}else if(typeof self!=="undefined"){g=self}else{g=this}g.linkifyPlusPlusCore = f()}})(function(){var define,module,exports;return (function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof require=="function"&&require;if(!u&&a)return a(o,!0);if(i)return i(o,!0);var f=new Error("Cannot find module '"+o+"'");throw f.code="MODULE_NOT_FOUND",f}var l=n[o]={exports:{}};t[o][0].call(l.exports,function(e){var n=t[o][1][e];return s(n?n:e)},l,l.exports,e,t,n,r)}return n[o].exports}var i=typeof require=="function"&&require;for(var o=0;o<r.length;o++)s(r[o]);return s})({1:[function(require,module,exports){
+var _require = require("./lib/url-matcher"),
+    UrlMatcher = _require.UrlMatcher,
+    _require2 = require("./lib/linkifier"),
+    INVALID_TAGS = _require2.INVALID_TAGS,
+    Linkifier = _require2.Linkifier;
+
+module.exports = {
+	UrlMatcher,
+	Linkifier,
+	INVALID_TAGS
+};
+
+},{"./lib/linkifier":2,"./lib/url-matcher":4}],2:[function(require,module,exports){
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 /* eslint-env browser */
@@ -244,7 +257,7 @@ module.exports = {
 	Linkifier
 };
 
-},{}],2:[function(require,module,exports){
+},{}],3:[function(require,module,exports){
 module.exports={
   "maxLength": 22,
   "chars": "セール佛山慈善集团在线한국八卦موقعবাংল公司网站移动我爱你москвақзнлйтрбгеファッションストア삼성சிங்கபூர商标城дию新闻家電中文信国國భారత్ලංකාクラウドભારતभारत店संगठन餐厅络у香港食品飞利浦台湾灣手机الجزئرنیتبپکسدية澳門닷컴شكგე构健康ไทยфみんなελ世界書籍址넷コム息صط广东இலைநதயாհայ加坡ف",
@@ -1343,7 +1356,7 @@ module.exports={
     "فلسطين": true
   }
 }
-},{}],3:[function(require,module,exports){
+},{}],4:[function(require,module,exports){
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 var tlds = require("./tlds.json"),
@@ -1683,17 +1696,5 @@ module.exports = {
 	UrlMatcher
 };
 
-},{"./tlds.json":2}],"linkify-plus-plus-core":[function(require,module,exports){
-var _require = require("./lib/url-matcher"),
-    UrlMatcher = _require.UrlMatcher,
-    _require2 = require("./lib/linkifier"),
-    INVALID_TAGS = _require2.INVALID_TAGS,
-    Linkifier = _require2.Linkifier;
-
-module.exports = {
-	UrlMatcher,
-	Linkifier,
-	INVALID_TAGS
-};
-
-},{"./lib/linkifier":1,"./lib/url-matcher":3}]},{},[]);
+},{"./tlds.json":3}]},{},[1])(1)
+});

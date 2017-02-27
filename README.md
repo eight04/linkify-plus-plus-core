@@ -18,13 +18,13 @@ Installation
 ```
 npm install -S linkify-plus-plus-core
 ```
-There is also a browserified version in `dist` folder. Just add
+There is also a browserified standalone build in `dist` folder, which can be included in your html directly.
 ```
 <script src="path/to/linkify-plus-plus-core.js"></script>
-```
-and `require()` it as
-```JavaScript
-var {UrlMatcher, Linkifier} = require("linkify-plus-plus-core");
+<script>
+// access the module with "linkifyPlusPlusCore" global
+var {UrlMatcher, Linkifier} = linkifyPlusPlusCore;
+</script>
 ```
 
 Usage

@@ -1,6 +1,6 @@
 /* eslint-env browser */
 /* globals Vue */
-var {UrlMatcher, Linkifier} = require("linkify-plus-plus-core");
+var {UrlMatcher, Linkifier} = linkifyPlusPlusCore;
 
 var app = new Vue({
 	el: ".main",
