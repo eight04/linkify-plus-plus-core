@@ -21,6 +21,12 @@ Installation
 ```
 npm install -S linkify-plus-plus-core
 ```
+```JavaScript
+var {UrlMatcher, Linkifier} = require("linkify-plus-plus-core");
+// or use the matcher only
+var {UrlMatcher} = require("linkify-plus-plus-core/lib/url-matcher")
+```
+
 There is also a browserified standalone build in `dist` folder, which can be included in your html directly.
 ```
 <script src="path/to/linkify-plus-plus-core.js"></script>
