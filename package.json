@@ -10,7 +10,7 @@
     "url": "https://github.com/eight04/linkify-plus-plus-core/issues",
     "email": "eight04@gmail.com"
   },
-  "license": "SEE LICENSE IN LICENSE",
+  "license": "BSD-3-Clause",
   "author": "eight <eight04@gmail.com>",
   "main": "index.js",
   "repository": "eight04/linkify-plus-plus-core",

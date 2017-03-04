@@ -128,7 +128,7 @@ Other notes
 
 License
 -------
-In the very old days, the script is based on Linkify Plus. Although it has been rewritten multiple times, the original license can be found at `LICENSE`.
+In the very old days, the script is based on Linkify Plus. Although it has been rewritten multiple times, the original license can be found [here](https://github.com/eight04/linkify-plus-plus-core/blob/master/LICENSE).
 
 TLD list is grabbed from <http://data.iana.org/TLD/tlds-alpha-by-domain.txt>.
 
