@@ -137,6 +137,11 @@ TLD count is grabbed from <http://research.domaintools.com/statistics/tld-counts
 Changelog
 ---------
 
+* Version 0.2.0 (Mar 4, 2017):
+
+  - Use standalone build instead of require.
+  - Fix: blocking bug with large element without matching urls.
+
 * Version 0.1.0 (Feb 23, 2017):
 
   - First release
