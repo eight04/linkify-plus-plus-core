@@ -189,7 +189,6 @@ function* generateChunks(_ref) {
 			textRange.collapse();
 
 			frag.appendChild(link);
-			yield;
 		}
 		if (pos) {
 			pos.moveTo(text.length);
@@ -198,8 +197,8 @@ function* generateChunks(_ref) {
 
 			range.deleteContents();
 			range.insertNode(frag);
-			yield;
 		}
+		yield;
 	}
 }
 
