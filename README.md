@@ -164,7 +164,7 @@ Linkifier emits following events, which could be listened with `.on`:
 
 A convenient function to setup Linkifier. See Linkifier for the arguments. Additionally, if option object has some keys starting with `on`, the function treats them as event listeners. You can register event listeners like:
 
-```
+```js
 linkify({
   root,
   matcher,
