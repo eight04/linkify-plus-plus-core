@@ -143,15 +143,15 @@ Abort linkification.
 
 Linkifier emits following events, which could be listened with `.on`:
 
-* complete - emit when the linkification completed. Listener arguments:
+* complete - emitted when the linkification completed. Listener arguments:
 
   - elapse: number. Time in milliseconds that Linkifier take to complete.
   
-* error - emit when the linkification failed. Listener arguments:
+* error - emitted when the linkification failed. Listener arguments:
 
   - error: The error.
   
-* link - emit when a link is created. You can alter the style, or implement your link builder to replace the default one. Listener arguments:
+* link - emitted when a link is created. You can alter the style, or implement your link builder to replace the default one. Listener arguments:
   
   - An object containing following properties:
   
@@ -162,10 +162,11 @@ Linkifier emits following events, which could be listened with `.on`:
     
 ### linkify([root: element, ] options: object) -> Promise
 
-A convenient function to setup Linkifier. See Linkifier for the arguments. Additionally, if option object has some keys starting with `on`, the function treats them as event listeners. You can register event listener like this:
+A convenient function to setup Linkifier. See Linkifier for the arguments. Additionally, if option object has some keys starting with `on`, the function treats them as event listeners. You can register event listeners like:
 
 ```
-linkify(root, {
+linkify({
+  root,
   matcher,
   onlink: ({link}) => {...}
 }).then(...);
@@ -186,6 +187,11 @@ TLD count is grabbed from <http://research.domaintools.com/statistics/tld-counts
 
 Changelog
 ---------
+
+* Version 0.3.0 (Aug 23, 2017):
+
+  - **Drop: Linkifier.prototype.linkify. Now Linkifier uses event pattern.**
+  - Add linkify function.
 
 * Version 0.2.0 (Mar 4, 2017):
 
