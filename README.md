@@ -14,7 +14,7 @@ Features
 This module exports 2 classes.
 
 * UrlMatcher - an URL matcher which can match almost all types of links from a string.
-* Linkifier - a promise-based service to run linkification on an element.
+* Linkifier - to run linkification on an element.
 
 Installation
 ------------
@@ -36,6 +36,11 @@ var {UrlMatcher, Linkifier} = linkifyPlusPlusCore;
 </script>
 ```
 
+CDN
+```
+<script src="https://unpkg.com/linkify-plus-plus-core/dist/linkify-plus-plus-core.js"></script>
+```
+
 Usage
 -----
 ```JavaScript
@@ -49,14 +54,19 @@ for (var link of matcher.match(text)) {
 ```
 ```JavaScript
 // Linkifier needs a matcher to work
-var linkifier = new Linkifier({matcher: matcher});
+var linkifier = new Linkifier(document.body, {matcher: matcher});
 
 // Linkifier will walk through the DOM tree, match url against all text nodes, and replace them with anchor element.
-linkifier.linkify(document.body).then(elapse => {
+linkifier.on("complete", elapse => {
 	console.log(`finished in ${elapse}ms`);
-}, err => {
+});
+linkifier.on("error", err => {
 	console.log("failed with error:", err);
 });
+linkifier.start();
+
+// It is suggested to use `linkify()` function which wraps Linkifier to a promise.
+linkify(document.body, {matcher}).then(onComplete, onError);
 ```	
 
 API references
@@ -65,11 +75,12 @@ This module exports
 
 * UrlMatcher - a class to find link from string
 * Linkifier - a class to linkify elements
+* linkify - a function wrapping Linkifier. Return a promise.
 * INVALID_TAGS - a table of uppercase tag name, which are invalid ancestors for `<a>` element.
 
 ### UrlMatcher
 
-#### UrlMatcher.constructor([options: object])
+#### new UrlMatcher([options: object])
 
 The options object, all properties are optional:
 
@@ -81,9 +92,9 @@ The options object, all properties are optional:
 * options.boundaryLeft: string - works with `standalone` option. Allow some characters to be placed between whitespace and link. Some common characters are `{[("'`.
 * options.boundaryRight: string - works with `standalone` option. Allow some characters to be placed between whitespace and link. Some common characters are `'")]},.;?!`.
 
-#### UrlMatcher.match(text: string): generator
+#### UrlMatcher.prototype.match(text: string): generator
 
-The generator yielding matched result. The result object:
+This generator yields matched result. The result object:
 
 * result.start: integer - the start position of the url.
 * result.end: integer - the end position of the url.
@@ -95,13 +106,17 @@ There are also some properties for each parts of the URL: `.protocol`, `.auth`, 
 
 ### Linkifier
 
-#### Linkifier.constructor(options: object)
+This class extends [`event-lite`](https://www.npmjs.com/package/event-lite).
+
+#### new Linkifier([root: element, ] options: object)
+
+* root: the element to be linkified.
 
 The options object:
 
-* options.matcher: any object with MatcherInterface, required.
+* options.matcher: URLMatcher, required.
 
-  A matcher is an object, having a `.match` method, which accepts a string and returns an iterable of matched result.
+  Any object having a `.match` method, which accepts a string and returns an iterable of matched result, should work.
   
   The match result must have `.start`, `.end`, `.text`, and `.url` properties described above.
   
@@ -110,16 +125,51 @@ The options object:
   A function recieving an element and returning a boolean to decide if the element should be linkified. Note that the elements in `INVALID_TAGS` are already filtered out before the validator.
   
 * options.newTab: boolean, default:true - add `target="_blank"` to the link.
+* options.noOpener: boolean, default:true - add `rel="noopener"` to the link.
+* options.root: element - if `root` argument is omitted, this value is adopted.
 * options.embedImage: boolean, default:true - create `<img>` for the link if the url looks like an image.
 * options.maxRunTime: number, default:100 - in milliseconds. The linkify process is splited into small chunks to avoid blocking. This is the max running time of each chunk.
 * options.timeout: number, default:10000 - in milliseconds. If linkification have processed over this value, an error is raised. Note that any heavy work between each chunks are counted as in timeout too.
 
-#### Linkifier.linkify(element): promise
+#### Linkifier.prototype.start()
 
-Linkify an element. The linkifier would walk through the DOM tree, collect text node and `<wbr>` tags, match link with matcher, and convert them into links.
+Start linkification. The linkifier would walk through the DOM tree, collect text nodes and `<wbr>` tags, match URLs with matcher, and convert them into links.
 
-When finished, the promise is resolved with elapsed time.
-When timeout, the promise is rejected with an error.
+#### Linkifier.prototype.abort()
+
+Abort linkification.
+
+#### Events
+
+Linkifier emits following events, which could be listened with `.on`:
+
+* complete - emit when the linkification completed. Listener arguments:
+
+  - elapse: number. Time in milliseconds that Linkifier take to complete.
+  
+* error - emit when the linkification failed. Listener arguments:
+
+  - error: The error.
+  
+* link - emit when a link is created. You can alter the style, or implement your link builder to replace the default one. Listener arguments:
+  
+  - An object containing following properties:
+  
+    - result: the result object generated by `UrlMatcher.match()`
+    - range: Range. The text range linkifier is working on. Do not change the range unless you know what you are doing.
+    - link: AnchorElement.
+    - content: DocumentFragment. The text (including `<wbr>` tags) extract from matched text range, which is usually used as the content of the link.
+    
+### linkify([root: element, ] options: object) -> Promise
+
+A convenient function to setup Linkifier. See Linkifier for the arguments. Additionally, if option object has some keys starting with `on`, the function treats them as event listeners. You can register event listener like this:
+
+```
+linkify(root, {
+  matcher,
+  onlink: ({link}) => {...}
+}).then(...);
+```
 
 Other notes
 -----------
