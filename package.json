@@ -35,5 +35,8 @@
     "version": "npm run build && git add .",
     "postversion": "git push --follow-tags && npm publish",
     "watch": "n-run -w lib/*.js \"npm run build\""
+  },
+  "dependencies": {
+    "event-lite": "^0.1.1"
   }
 }

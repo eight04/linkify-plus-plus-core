@@ -1,6 +1,6 @@
 /* eslint-env browser */
 /* globals Vue, linkifyPlusPlusCore */
-var {UrlMatcher, Linkifier} = linkifyPlusPlusCore;
+var {UrlMatcher, linkify} = linkifyPlusPlusCore;
 
 var app = new Vue({
 	el: ".main",
@@ -31,7 +31,7 @@ function output() {
 	out.textContent = app.text;
 	var options = Object.assign(app.options);
 	options.matcher = new UrlMatcher(options);
-	new Linkifier(options).linkify(out).then(() => {
+	linkify(out, options).then(() => {
 		state.working = false;
 		if (state.pending) {
 			state.pending = false;
