@@ -3,18 +3,27 @@ var _require = require("./lib/url-matcher"),
     UrlMatcher = _require.UrlMatcher,
     _require2 = require("./lib/linkifier"),
     INVALID_TAGS = _require2.INVALID_TAGS,
-    Linkifier = _require2.Linkifier;
+    Linkifier = _require2.Linkifier,
+    linkify = _require2.linkify;
 
 module.exports = {
 	UrlMatcher,
 	Linkifier,
-	INVALID_TAGS
+	INVALID_TAGS,
+	linkify
 };
 
 },{"./lib/linkifier":2,"./lib/url-matcher":4}],2:[function(require,module,exports){
+function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 /* eslint-env browser */
+
+var Events = require("event-lite");
+
 var INVALID_TAGS = {
 	A: true,
 	NOSCRIPT: true,
@@ -32,9 +41,6 @@ var INVALID_TAGS = {
 	MATH: true,
 	TIME: true
 };
-
-var doc = document,
-    time = Date.now;
 
 var Pos = function () {
 	function Pos(container, offset) {
@@ -84,179 +90,224 @@ var Pos = function () {
 	return Pos;
 }();
 
-function* generateRanges(node, filter) {
-	// Generate linkified ranges.
-	var walker = doc.createTreeWalker(node, NodeFilter.SHOW_TEXT + NodeFilter.SHOW_ELEMENT, filter),
-	    start,
-	    end,
-	    current,
-	    range;
-
-	end = start = walker.nextNode();
-	if (!start) {
-		return;
-	}
-	range = doc.createRange();
-	range.setStartBefore(start);
-	while (current = walker.nextNode()) {
-		if (end.nextSibling == current) {
-			end = current;
-			continue;
-		}
-		range.setEndAfter(end);
-		yield range;
-
-		end = start = current;
-		range.setStartBefore(start);
-	}
-	range.setEndAfter(end);
-	yield range;
-}
-
-function createFilter(customValidator) {
-	return {
-		acceptNode: function (node) {
-			if (customValidator && !customValidator(node)) {
-				return NodeFilter.FILTER_REJECT;
-			}
-			if (INVALID_TAGS[node.nodeName]) {
-				return NodeFilter.FILTER_REJECT;
-			}
-			if (node.nodeName == "WBR") {
-				return NodeFilter.FILTER_ACCEPT;
-			}
-			if (node.nodeType == 3) {
-				return NodeFilter.FILTER_ACCEPT;
-			}
-			return NodeFilter.FILTER_SKIP;
-		}
-	};
-}
-
 function cloneContents(range) {
 	if (range.startContainer == range.endContainer) {
-		return doc.createTextNode(range.toString());
+		return document.createTextNode(range.toString());
 	}
 	return range.cloneContents();
 }
 
-function* generateChunks(_ref) {
-	var ranges = _ref.ranges,
-	    matcher = _ref.matcher,
-	    _ref$newTab = _ref.newTab,
-	    newTab = _ref$newTab === undefined ? true : _ref$newTab,
-	    _ref$embedImage = _ref.embedImage,
-	    embedImage = _ref$embedImage === undefined ? true : _ref$embedImage;
+var DEFAULT_OPTIONS = {
+	maxRunTime: 100,
+	timeout: 10000,
+	newTab: true,
+	noOpener: true,
+	embedImage: true
+};
 
-	for (var range of ranges) {
-		var frag = null,
-		    pos = null,
-		    text = range.toString(),
-		    textRange = null;
-		for (var result of matcher.match(text)) {
-			if (!frag) {
-				frag = doc.createDocumentFragment();
-				pos = new Pos(range.startContainer, range.startOffset);
-				textRange = range.cloneRange();
-			}
-			// clone text
-			pos.moveTo(result.start);
-			textRange.setEnd(pos.container, pos.offset);
-			frag.appendChild(cloneContents(textRange));
+var Linkifier = function (_Events) {
+	_inherits(Linkifier, _Events);
 
-			// clone link
-			textRange.collapse();
-			pos.moveTo(result.end);
-			textRange.setEnd(pos.container, pos.offset);
+	function Linkifier(root) {
+		var options = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
 
-			var link = doc.createElement("a");
-			link.href = result.url;
-			link.title = "Linkify Plus Plus";
-			link.className = "linkifyplus";
-			if (newTab) {
-				link.target = "_blank";
-			}
-			var child;
-			if (embedImage && /^[^?#]+\.(?:jpg|png|gif|jpeg)(?:$|[?#])/i.test(result.url)) {
-				child = new Image();
-				child.src = result.url;
-				child.alt = result.text;
-			} else {
-				child = cloneContents(textRange);
-			}
-			link.appendChild(child);
-
-			textRange.collapse();
-
-			frag.appendChild(link);
-		}
-		if (pos) {
-			pos.moveTo(text.length);
-			textRange.setEnd(pos.container, pos.offset);
-			frag.appendChild(cloneContents(textRange));
-
-			range.deleteContents();
-			range.insertNode(frag);
-		}
-		yield;
-	}
-}
-
-var Linkifier = function () {
-	function Linkifier(options) {
 		_classCallCheck(this, Linkifier);
 
-		this.options = options;
+		var _this = _possibleConstructorReturn(this, _Events.call(this));
+
+		if (!(root instanceof Node)) {
+			options = root;
+			root = options.root;
+		}
+		_this.root = root;
+		_this.options = Object.assign({}, DEFAULT_OPTIONS, options);
+		_this.aborted = false;
+		return _this;
 	}
 
-	Linkifier.prototype.linkify = function linkify(root) {
-		return new Promise((resolve, reject) => {
-			var _options = this.options,
-			    matcher = _options.matcher,
-			    validator = _options.validator,
-			    _options$maxRunTime = _options.maxRunTime,
-			    maxRunTime = _options$maxRunTime === undefined ? 100 : _options$maxRunTime,
-			    _options$timeout = _options.timeout,
-			    timeout = _options$timeout === undefined ? 10000 : _options$timeout,
-			    newTab = _options.newTab,
-			    embedImage = _options.embedImage,
-			    ranges = generateRanges(root, createFilter(validator)),
-			    chunks = generateChunks({ matcher, newTab, embedImage, ranges }),
-			    linkifyStart = time();
+	Linkifier.prototype.start = function start() {
+		var time = Date.now,
+		    startTime = time(),
+		    chunks = this.generateChunks();
 
+		var next = () => {
+			if (this.aborted) {
+				this.emit("error", new Error("Aborted"));
+				return;
+			}
+			var chunkStart = time(),
+			    now;
 
-			function next() {
-				var nextStart = time(),
-				    now;
-
-				do {
-					if (chunks.next().done) {
-						resolve(time() - linkifyStart);
-						return;
-					}
-				} while ((now = time()) - nextStart < maxRunTime);
-
-				if (now - linkifyStart > timeout) {
-					reject(new Error(`max execution time exceeded: ${now - linkifyStart}, on ${root}`));
+			do {
+				if (chunks.next().done) {
+					this.emit("complete", time() - startTime);
 					return;
 				}
+			} while ((now = time()) - chunkStart < this.options.maxRunTime);
 
-				setTimeout(next);
+			if (now - startTime > this.options.timeout) {
+				this.emit("error", new Error(`max execution time exceeded: ${now - startTime}, on ${this.root}`));
+				return;
 			}
 
 			setTimeout(next);
-		});
+		};
+
+		setTimeout(next);
+	};
+
+	Linkifier.prototype.abort = function abort() {
+		this.aborted = true;
+	};
+
+	Linkifier.prototype.generateRanges = function* generateRanges() {
+		var validator = this.options.validator;
+
+		var filter = {
+			acceptNode: function (node) {
+				if (validator && !validator(node)) {
+					return NodeFilter.FILTER_REJECT;
+				}
+				if (INVALID_TAGS[node.nodeName]) {
+					return NodeFilter.FILTER_REJECT;
+				}
+				if (node.nodeName == "WBR") {
+					return NodeFilter.FILTER_ACCEPT;
+				}
+				if (node.nodeType == 3) {
+					return NodeFilter.FILTER_ACCEPT;
+				}
+				return NodeFilter.FILTER_SKIP;
+			}
+		};
+		// Generate linkified ranges.
+		var walker = document.createTreeWalker(this.root, NodeFilter.SHOW_TEXT + NodeFilter.SHOW_ELEMENT, filter),
+		    start,
+		    end,
+		    current,
+		    range;
+
+		end = start = walker.nextNode();
+		if (!start) {
+			return;
+		}
+		range = document.createRange();
+		range.setStartBefore(start);
+		while (current = walker.nextNode()) {
+			if (end.nextSibling == current) {
+				end = current;
+				continue;
+			}
+			range.setEndAfter(end);
+			yield range;
+
+			end = start = current;
+			range.setStartBefore(start);
+		}
+		range.setEndAfter(end);
+		yield range;
+	};
+
+	Linkifier.prototype.generateChunks = function* generateChunks() {
+		var matcher = this.options.matcher;
+
+		for (var range of this.generateRanges()) {
+			var frag = null,
+			    pos = null,
+			    text = range.toString(),
+			    textRange = null;
+			for (var result of matcher.match(text)) {
+				if (!frag) {
+					frag = document.createDocumentFragment();
+					pos = new Pos(range.startContainer, range.startOffset);
+					textRange = range.cloneRange();
+				}
+				// clone text
+				pos.moveTo(result.start);
+				textRange.setEnd(pos.container, pos.offset);
+				frag.appendChild(cloneContents(textRange));
+
+				// clone link
+				textRange.collapse();
+				pos.moveTo(result.end);
+				textRange.setEnd(pos.container, pos.offset);
+
+				var content = cloneContents(textRange),
+				    link = this.buildLink(result, content);
+
+				textRange.collapse();
+
+				frag.appendChild(link);
+				this.emit("link", { link, range, result, content });
+			}
+			if (pos) {
+				pos.moveTo(text.length);
+				textRange.setEnd(pos.container, pos.offset);
+				frag.appendChild(cloneContents(textRange));
+
+				range.deleteContents();
+				range.insertNode(frag);
+			}
+			yield;
+		}
+	};
+
+	Linkifier.prototype.buildLink = function buildLink(result, content) {
+		var _options = this.options,
+		    newTab = _options.newTab,
+		    embedImage = _options.embedImage,
+		    noOpener = _options.noOpener;
+
+		var link = document.createElement("a");
+		link.href = result.url;
+		link.title = "Linkify Plus Plus";
+		link.className = "linkifyplus";
+		if (newTab) {
+			link.target = "_blank";
+		}
+		if (noOpener) {
+			link.rel = "noopener";
+		}
+		var child;
+		if (embedImage && /^[^?#]+\.(?:jpg|png|gif|jpeg|svg)(?:$|[?#])/i.test(result.url)) {
+			child = new Image();
+			child.src = result.url;
+			child.alt = result.text;
+		} else {
+			child = content;
+		}
+		link.appendChild(child);
+		return link;
 	};
 
 	return Linkifier;
-}();
+}(Events);
+
+function linkify() {
+	for (var _len = arguments.length, args = Array(_len), _key = 0; _key < _len; _key++) {
+		args[_key] = arguments[_key];
+	}
+
+	return new Promise((resolve, reject) => {
+		var linkifier = new Linkifier(...args);
+		linkifier.on("error", reject);
+		linkifier.on("complete", resolve);
+		for (var key of Object.keys(linkifier.options)) {
+			if (key.startsWith("on")) {
+				linkifier.on(key.slice(2), linkifier.options[key]);
+			}
+		}
+		linkifier.start();
+	});
+}
 
 module.exports = {
 	INVALID_TAGS,
-	Linkifier
+	Linkifier,
+	linkify
 };
 
-},{}],3:[function(require,module,exports){
+},{"event-lite":5}],3:[function(require,module,exports){
 module.exports={
   "maxLength": 22,
   "chars": "セール佛山慈善集团在线한국八卦موقعবাংল公司网站移动我爱你москвақзнлйтрбгеファッションストア삼성சிங்கபூர商标城дию新闻家電中文信国國భారత్ලංකාクラウドભારતभारत店संगठन餐厅络у香港食品飞利浦台湾灣手机الجزئرنیتبپکسدية澳門닷컴شكგე构健康ไทยфみんなελ世界書籍址넷コム息صط广东இலைநதயாհայ加坡ف",
@@ -1371,7 +1422,7 @@ var tlds = require("./tlds.json"),
     TLD_TABLE = tlds.table;
 
 function regexEscape(text) {
-	return text.replace(/[\[\]\\^-]/g, "\\$&");
+	return text.replace(/[[\]\\^-]/g, "\\$&");
 }
 
 function buildRegex(_ref) {
@@ -1695,5 +1746,187 @@ module.exports = {
 	UrlMatcher
 };
 
-},{"./tlds.json":3}]},{},[1])(1)
+},{"./tlds.json":3}],5:[function(require,module,exports){
+/**
+ * event-lite.js - Light-weight EventEmitter (less than 1KB when gzipped)
+ *
+ * @copyright Yusuke Kawasaki
+ * @license MIT
+ * @constructor
+ * @see https://github.com/kawanet/event-lite
+ * @see http://kawanet.github.io/event-lite/EventLite.html
+ * @example
+ * var EventLite = require("event-lite");
+ *
+ * function MyClass() {...}             // your class
+ *
+ * EventLite.mixin(MyClass.prototype);  // import event methods
+ *
+ * var obj = new MyClass();
+ * obj.on("foo", function() {...});     // add event listener
+ * obj.once("bar", function() {...});   // add one-time event listener
+ * obj.emit("foo");                     // dispatch event
+ * obj.emit("bar");                     // dispatch another event
+ * obj.off("foo");                      // remove event listener
+ */
+
+function EventLite() {
+  if (!(this instanceof EventLite)) return new EventLite();
+}
+
+(function(EventLite) {
+  // export the class for node.js
+  if ("undefined" !== typeof module) module.exports = EventLite;
+
+  // property name to hold listeners
+  var LISTENERS = "listeners";
+
+  // methods to export
+  var methods = {
+    on: on,
+    once: once,
+    off: off,
+    emit: emit
+  };
+
+  // mixin to self
+  mixin(EventLite.prototype);
+
+  // export mixin function
+  EventLite.mixin = mixin;
+
+  /**
+   * Import on(), once(), off() and emit() methods into target object.
+   *
+   * @function EventLite.mixin
+   * @param target {Prototype}
+   */
+
+  function mixin(target) {
+    for (var key in methods) {
+      target[key] = methods[key];
+    }
+    return target;
+  }
+
+  /**
+   * Add an event listener.
+   *
+   * @function EventLite.prototype.on
+   * @param type {string}
+   * @param func {Function}
+   * @returns {EventLite} Self for method chaining
+   */
+
+  function on(type, func) {
+    getListeners(this, type).push(func);
+    return this;
+  }
+
+  /**
+   * Add one-time event listener.
+   *
+   * @function EventLite.prototype.once
+   * @param type {string}
+   * @param func {Function}
+   * @returns {EventLite} Self for method chaining
+   */
+
+  function once(type, func) {
+    var that = this;
+    wrap.originalListener = func;
+    getListeners(that, type).push(wrap);
+    return that;
+
+    function wrap() {
+      off.call(that, type, wrap);
+      func.apply(this, arguments);
+    }
+  }
+
+  /**
+   * Remove an event listener.
+   *
+   * @function EventLite.prototype.off
+   * @param [type] {string}
+   * @param [func] {Function}
+   * @returns {EventLite} Self for method chaining
+   */
+
+  function off(type, func) {
+    var that = this;
+    var listners;
+    if (!arguments.length) {
+      delete that[LISTENERS];
+    } else if (!func) {
+      listners = that[LISTENERS];
+      if (listners) {
+        delete listners[type];
+        if (!Object.keys(listners).length) return off.call(that);
+      }
+    } else {
+      listners = getListeners(that, type, true);
+      if (listners) {
+        listners = listners.filter(ne);
+        if (!listners.length) return off.call(that, type);
+        that[LISTENERS][type] = listners;
+      }
+    }
+    return that;
+
+    function ne(test) {
+      return test !== func && test.originalListener !== func;
+    }
+  }
+
+  /**
+   * Dispatch (trigger) an event.
+   *
+   * @function EventLite.prototype.emit
+   * @param type {string}
+   * @param [value] {*}
+   * @returns {boolean} True when a listener received the event
+   */
+
+  function emit(type, value) {
+    var that = this;
+    var listeners = getListeners(that, type, true);
+    if (!listeners) return false;
+    var arglen = arguments.length;
+    if (arglen === 1) {
+      listeners.forEach(zeroarg);
+    } else if (arglen === 2) {
+      listeners.forEach(onearg);
+    } else {
+      var args = Array.prototype.slice.call(arguments, 1);
+      listeners.forEach(moreargs);
+    }
+    return !!listeners.length;
+
+    function zeroarg(func) {
+      func.call(that);
+    }
+
+    function onearg(func) {
+      func.call(that, value);
+    }
+
+    function moreargs(func) {
+      func.apply(that, args);
+    }
+  }
+
+  /**
+   * @ignore
+   */
+
+  function getListeners(that, type, readonly) {
+    if (readonly && !that[LISTENERS]) return;
+    var listeners = that[LISTENERS] || (that[LISTENERS] = {});
+    return listeners[type] || (listeners[type] = []);
+  }
+
+})(EventLite);
+
+},{}]},{},[1])(1)
 });
