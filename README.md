@@ -192,6 +192,7 @@ Changelog
 
   - **Drop: Linkifier.prototype.linkify. Now Linkifier uses event pattern.**
   - Add linkify function.
+  - Update TLDs.
 
 * Version 0.2.0 (Mar 4, 2017):
 
