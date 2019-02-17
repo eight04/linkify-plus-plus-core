@@ -263,6 +263,10 @@ Changelog
 * 0.4.0 (Next):
 
   - **Breaking: drop Firefox < 56.**
+  - **Breaking: drop babel.**
+  - **Breaking: INVALID_TAGS is now in lower-case.**
+  - Add: support XHTML pages.
+  - Update TLDs.
 
 * Version 0.3.0 (Aug 23, 2017):
 
