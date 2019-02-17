@@ -16,13 +16,15 @@
   "repository": "eight04/linkify-plus-plus-core",
   "devDependencies": {
     "cheerio": "^1.0.0-rc.2",
+    "eslint": "^5.14.0",
+    "eslint-plugin-compat": "^2.7.0",
     "mocha": "^5.2.0",
     "request": "^2.88.0"
   },
   "scripts": {
     "build-tlds": "node build-tlds.js | n-pipe lib/tlds.json",
     "build": "browserify index.js --standalone linkifyPlusPlusCore -t babelify | n-pipe dist/linkify-plus-plus-core.js",
-    "test": "eslint **/*.js && mocha",
+    "test": "eslint \"**/*.js\" && mocha",
     "preversion": "npm test",
     "version": "npm run build && git add .",
     "postversion": "git push --follow-tags && npm publish",
@@ -30,5 +32,8 @@
   },
   "dependencies": {
     "event-lite": "^0.1.2"
-  }
+  },
+  "browserslist": [
+    "Firefox >= 56"
+  ]
 }
