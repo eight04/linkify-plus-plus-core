@@ -188,6 +188,10 @@ TLD count is grabbed from <http://research.domaintools.com/statistics/tld-counts
 Changelog
 ---------
 
+* 0.4.0 (Next):
+
+  - **Breaking: drop Firefox < 56.**
+
 * Version 0.3.0 (Aug 23, 2017):
 
   - **Drop: Linkifier.prototype.linkify. Now Linkifier uses event pattern.**
