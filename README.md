@@ -260,7 +260,7 @@ TLD count is grabbed from <http://research.domaintools.com/statistics/tld-counts
 Changelog
 ---------
 
-* 0.4.0 (Next):
+* 0.4.0 (Feb 17, 2019):
 
   - **Breaking: drop Firefox < 56.**
   - **Breaking: drop babel.**
@@ -268,17 +268,17 @@ Changelog
   - Add: support XHTML pages.
   - Update TLDs.
 
-* Version 0.3.0 (Aug 23, 2017):
+* 0.3.0 (Aug 23, 2017):
 
   - **Drop: Linkifier.prototype.linkify. Now Linkifier uses event pattern.**
   - Add linkify function.
   - Update TLDs.
 
-* Version 0.2.0 (Mar 4, 2017):
+* 0.2.0 (Mar 4, 2017):
 
   - Use standalone build instead of require.
   - Fix: blocking bug with large element without matching urls.
 
-* Version 0.1.0 (Feb 23, 2017):
+* 0.1.0 (Feb 23, 2017):
 
   - First release

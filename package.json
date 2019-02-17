@@ -40,5 +40,9 @@
   "browserslist": [
     "Firefox >= 56"
   ],
-  "eslintIgnore": ["dist"]
+  "eslintIgnore": ["dist"],
+  "files": [
+    "dist",
+    "lib"
+  ]
 }
