@@ -27,7 +27,7 @@
     "rollup-plugin-terser": "^4.0.4"
   },
   "scripts": {
-    "build-tlds": "node build-tlds.js | n-pipe lib/tlds.json",
+    "build-tlds": "node build-tlds.js > lib/tlds.json",
     "build": "rollup -c",
     "test": "eslint \"**/*.js\" && mocha",
     "preversion": "npm test",
