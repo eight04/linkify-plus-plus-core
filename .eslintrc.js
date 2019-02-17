@@ -10,5 +10,12 @@ module.exports = {
 	"globals": {
 		"require": false,
 		"module": false
-	}
+	},
+  overrides: [{
+    files: ["rollup.config.js"],
+    parserOptions: {
+      sourceType: "module",
+      ecmaVersion: 2019
+    }
+  }]
 };
