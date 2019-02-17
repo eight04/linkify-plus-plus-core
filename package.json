@@ -15,17 +15,9 @@
   "main": "index.js",
   "repository": "eight04/linkify-plus-plus-core",
   "devDependencies": {
-    "babel-cli": "^6.23.0",
-    "babel-plugin-transform-es2015-block-scoping": "^6.23.0",
-    "babel-plugin-transform-es2015-classes": "^6.23.0",
-    "babel-plugin-transform-es2015-destructuring": "^6.23.0",
-    "babel-plugin-transform-es2015-parameters": "^6.23.0",
-    "babelify": "^7.3.0",
-    "browserify": "^14.1.0",
-    "cheerio": "^0.22.0",
-    "mocha": "^3.2.0",
-    "npm-build-tools": "^2.2.5",
-    "request": "^2.79.0"
+    "cheerio": "^1.0.0-rc.2",
+    "mocha": "^5.2.0",
+    "request": "^2.88.0"
   },
   "scripts": {
     "build-tlds": "node build-tlds.js | n-pipe lib/tlds.json",
@@ -37,6 +29,6 @@
     "watch": "n-run -w lib/*.js \"npm run build\""
   },
   "dependencies": {
-    "event-lite": "^0.1.1"
+    "event-lite": "^0.1.2"
   }
 }
