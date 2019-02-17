@@ -1,11 +1,21 @@
 module.exports = {
-	"extends": "eslint:recommended",
+	"extends": [
+    "eslint:recommended",
+    "plugin:compat/recommended"
+  ],
 	"env": {
-		// we don't use node: true because it adds some globals that we don't need. e.g. root
-		"es6": true
+		"es6": true,
+    "node": true
 	},
 	"globals": {
 		"require": false,
 		"module": false
-	}
-}
+	},
+  overrides: [{
+    files: ["rollup.config.js"],
+    parserOptions: {
+      sourceType: "module",
+      ecmaVersion: 2019
+    }
+  }]
+};
