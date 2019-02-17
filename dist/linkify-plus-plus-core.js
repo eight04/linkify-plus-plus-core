@@ -1786,21 +1786,21 @@ var linkifyPlusPlusCore = (function (exports) {
   /* eslint-env browser */
 
   var INVALID_TAGS = {
-  	A: true,
-  	NOSCRIPT: true,
-  	OPTION: true,
-  	SCRIPT: true,
-  	STYLE: true,
-  	TEXTAREA: true,
-  	SVG: true,
-  	CANVAS: true,
-  	BUTTON: true,
-  	SELECT: true,
-  	TEMPLATE: true,
-  	METER: true,
-  	PROGRESS: true,
-  	MATH: true,
-  	TIME: true
+  	a: true,
+  	noscript: true,
+  	option: true,
+  	script: true,
+  	style: true,
+  	textarea: true,
+  	svg: true,
+  	canvas: true,
+  	button: true,
+  	select: true,
+  	template: true,
+  	meter: true,
+  	progress: true,
+  	math: true,
+  	time: true
   };
 
   class Pos {
@@ -1911,10 +1911,10 @@ var linkifyPlusPlusCore = (function (exports) {
   				if (validator && !validator(node)) {
   					return NodeFilter.FILTER_REJECT;
   				}
-  				if (INVALID_TAGS[node.nodeName]) {
+  				if (INVALID_TAGS[node.localName]) {
   					return NodeFilter.FILTER_REJECT;
   				}
-  				if (node.nodeName == "WBR") {
+  				if (node.localName == "wbr") {
   					return NodeFilter.FILTER_ACCEPT;
   				}
   				if (node.nodeType == 3) {
