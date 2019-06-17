@@ -30,7 +30,7 @@
   "scripts": {
     "build-tlds": "node build-tlds.js > lib/tlds.json",
     "build": "rollup -c",
-    "test": "eslint \"**/*.js\" && c8 mocha",
+    "test": "eslint \"**/*.js\" && c8 --reporter lcov mocha",
     "preversion": "npm test",
     "version": "npm run build && git add .",
     "postversion": "git push --follow-tags && npm publish"
