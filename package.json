@@ -17,15 +17,15 @@
   "devDependencies": {
     "c8": "^5.0.1",
     "cheerio": "^1.0.0-rc.2",
-    "eslint": "^5.14.0",
-    "eslint-plugin-compat": "^2.7.0",
-    "mocha": "^5.2.0",
+    "eslint": "^5.16.0",
+    "eslint-plugin-compat": "^3.1.2",
+    "mocha": "^6.1.4",
     "request": "^2.88.0",
-    "rollup": "^1.2.0",
-    "rollup-plugin-cjs-es": "^0.7.0",
-    "rollup-plugin-json": "^3.1.0",
-    "rollup-plugin-node-resolve": "^4.0.0",
-    "rollup-plugin-terser": "^4.0.4"
+    "rollup": "^1.15.6",
+    "rollup-plugin-cjs-es": "^0.9.0",
+    "rollup-plugin-json": "^4.0.0",
+    "rollup-plugin-node-resolve": "^5.0.3",
+    "rollup-plugin-terser": "^5.0.0"
   },
   "scripts": {
     "build-tlds": "node build-tlds.js > lib/tlds.json",
