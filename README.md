@@ -261,6 +261,10 @@ TLD count is grabbed from <http://research.domaintools.com/statistics/tld-counts
 Changelog
 ---------
 
+* 0.4.1 (Jun 17, 2019):
+
+  - Update TLDs.
+
 * 0.4.0 (Feb 17, 2019):
 
   - **Breaking: drop Firefox < 56.**
