@@ -1,8 +1,9 @@
 Linkify Plus Plus Core
 ======================
 
-[![Codacy Badge](https://api.codacy.com/project/badge/Grade/c364eadd48b347a6908eb3ed8efc2739)](https://www.codacy.com/app/eight04/linkify-plus-plus-core?utm_source=github.com&utm_medium=referral&utm_content=eight04/linkify-plus-plus-core&utm_campaign=badger)
 [![Build Status](https://travis-ci.com/eight04/linkify-plus-plus-core.svg?branch=master)](https://travis-ci.com/eight04/linkify-plus-plus-core)
+[![codecov](https://codecov.io/gh/eight04/linkify-plus-plus-core/branch/master/graph/badge.svg)](https://codecov.io/gh/eight04/linkify-plus-plus-core)
+[![Codacy Badge](https://api.codacy.com/project/badge/Grade/c364eadd48b347a6908eb3ed8efc2739)](https://www.codacy.com/app/eight04/linkify-plus-plus-core?utm_source=github.com&utm_medium=referral&utm_content=eight04/linkify-plus-plus-core&utm_campaign=badger)
 
 A JavaScript library for linkification stuff. Used by [linkify-plus-plus](https://github.com/eight04/linkify-plus-plus).
 

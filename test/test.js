@@ -100,4 +100,11 @@ describe("UrlMatcher", () => {
 		match.no("{{http://example.com}}");
 		match.no("{{\nhttp://example.com\n}}");
 	});
+  
+  it("custom rules", () => {
+    const match = prepare({customRules: [
+      "magnet:\\?\\S+"
+    ]});
+    match("magnet:?xt=urn:btih:c12fe1c06bba254a9dc9f519b335aa7c1367a88a&dn");
+  });
 });
