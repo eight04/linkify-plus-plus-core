@@ -2,7 +2,7 @@ var linkifyPlusPlusCore = (function (exports) {
   'use strict';
 
   var maxLength = 22;
-  var chars = "セール佛山ಭಾರತ慈善集团在线한국ଭାରତভাৰত八卦موقعবংল公益司香格里拉网站移动我爱你москвақзнлйтрбгеקוםファッションストアசிங்கபூர商标店城дию新闻家電中文信国國娱乐భారత్ලංකා购物クラウドभारतम्ोसंगठन餐厅络у港食品飞利浦台湾灣手机الجزئرنیتبيپکسدظةڀ澳門닷컴شكგე构健康ไทย招聘фみんなελ世界書籍ഭാരതംਭਾਰਤ址넷コム游戏企业息嘉大酒صط广东இலைநதயாհայ加坡ف政务";
+  var chars = "セール佛山ಭಾರತ慈善集团在线한국ଭାରତভাৰতর八卦موقعবংল公益司香格里拉网站移动我爱你москвақзнлйтрбгеקוםファッションストアசிங்கபூர商标店城дию新闻家電中文信国國娱乐భారత్ලංකා购物クラウドભારતभारतम्ोसंगठन餐厅络у港食品飞利浦台湾灣手机الجزئرنیتبيپکسدغظةڀ澳門닷컴شكგე构健康ไทย招聘фみんなελ世界書籍ഭാരതംਭਾਰਤ址넷コム游戏企业息嘉大酒صط广东இலைநதயாհայ加坡ف政务";
   var table = {
   	aarp: true,
   	abb: true,
@@ -19,6 +19,7 @@ var linkifyPlusPlusCore = (function (exports) {
   	aco: true,
   	actor: true,
   	ad: true,
+  	adac: true,
   	adult: true,
   	ae: true,
   	aeg: true,
@@ -79,7 +80,6 @@ var linkifyPlusPlusCore = (function (exports) {
   	azure: true,
   	ba: true,
   	baby: true,
-  	baidu: true,
   	band: true,
   	bank: true,
   	bar: true,
@@ -173,6 +173,7 @@ var linkifyPlusPlusCore = (function (exports) {
   	catering: true,
   	catholic: true,
   	cba: true,
+  	cbn: true,
   	cc: true,
   	cd: true,
   	center: true,
@@ -404,7 +405,6 @@ var linkifyPlusPlusCore = (function (exports) {
   	gn: true,
   	gold: true,
   	golf: true,
-  	goo: true,
   	goog: true,
   	google: true,
   	gop: true,
@@ -495,6 +495,7 @@ var linkifyPlusPlusCore = (function (exports) {
   	ist: true,
   	istanbul: true,
   	it: true,
+  	itau: true,
   	itv: true,
   	jaguar: true,
   	java: true,
@@ -524,7 +525,6 @@ var linkifyPlusPlusCore = (function (exports) {
   	kg: true,
   	kh: true,
   	ki: true,
-  	kia: true,
   	kim: true,
   	kinder: true,
   	kitchen: true,
@@ -576,7 +576,6 @@ var linkifyPlusPlusCore = (function (exports) {
   	link: true,
   	lipsy: true,
   	live: true,
-  	lixil: true,
   	lk: true,
   	llc: true,
   	loan: true,
@@ -708,6 +707,7 @@ var linkifyPlusPlusCore = (function (exports) {
   	obi: true,
   	observer: true,
   	off: true,
+  	office: true,
   	okinawa: true,
   	om: true,
   	omega: true,
@@ -755,6 +755,7 @@ var linkifyPlusPlusCore = (function (exports) {
   	plus: true,
   	pm: true,
   	pn: true,
+  	pohl: true,
   	poker: true,
   	porn: true,
   	post: true,
@@ -977,6 +978,7 @@ var linkifyPlusPlusCore = (function (exports) {
   	trust: true,
   	tt: true,
   	tube: true,
+  	tui: true,
   	tv: true,
   	tw: true,
   	tz: true,
@@ -1004,6 +1006,7 @@ var linkifyPlusPlusCore = (function (exports) {
   	vi: true,
   	viajes: true,
   	video: true,
+  	vig: true,
   	villas: true,
   	vin: true,
   	vip: true,
@@ -1059,6 +1062,7 @@ var linkifyPlusPlusCore = (function (exports) {
   	"xn--3e0b707e": true,
   	"xn--3hcrj9c": true,
   	"xn--45br5cyl": true,
+  	"xn--45brj9c": true,
   	"xn--45q11c": true,
   	"xn--4gbrim": true,
   	"xn--54b7fta0cc": true,
@@ -1097,6 +1101,7 @@ var linkifyPlusPlusCore = (function (exports) {
   	"xn--fzc2c9e2c": true,
   	"xn--g2xx48c": true,
   	"xn--gckr3f0f": true,
+  	"xn--gecrj9c": true,
   	"xn--h2breg3eve": true,
   	"xn--h2brj9c": true,
   	"xn--h2brj9c8c": true,
@@ -1121,6 +1126,7 @@ var linkifyPlusPlusCore = (function (exports) {
   	"xn--mgbai9azgqp6j": true,
   	"xn--mgbayh7gpa": true,
   	"xn--mgbbh1a": true,
+  	"xn--mgbc0a9azcg": true,
   	"xn--mgbca7dzdo": true,
   	"xn--mgberp4a5d4ar": true,
   	"xn--mgbgu82a": true,
@@ -1184,6 +1190,7 @@ var linkifyPlusPlusCore = (function (exports) {
   	"한국": true,
   	"ଭାରତ": true,
   	"ভাৰত": true,
+  	"ভারত": true,
   	"八卦": true,
   	"موقع": true,
   	"বাংলা": true,
@@ -1222,6 +1229,7 @@ var linkifyPlusPlusCore = (function (exports) {
   	"ලංකා": true,
   	"购物": true,
   	"クラウド": true,
+  	"ભારત": true,
   	"भारतम्": true,
   	"भारत": true,
   	"भारोत": true,
@@ -1246,6 +1254,7 @@ var linkifyPlusPlusCore = (function (exports) {
   	"پاکستان": true,
   	"الاردن": true,
   	"بارت": true,
+  	"المغرب": true,
   	"ابوظبي": true,
   	"السعودية": true,
   	"ڀارت": true,
@@ -2031,9 +2040,9 @@ var linkifyPlusPlusCore = (function (exports) {
   	});
   }
 
-  exports.UrlMatcher = UrlMatcher;
-  exports.Linkifier = Linkifier;
   exports.INVALID_TAGS = INVALID_TAGS;
+  exports.Linkifier = Linkifier;
+  exports.UrlMatcher = UrlMatcher;
   exports.linkify = linkify;
 
   return exports;
