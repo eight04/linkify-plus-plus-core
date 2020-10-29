@@ -98,6 +98,7 @@ This module exports:
 ```js
 const urlMatcher = new UrlMatcher({
   fuzzyIp: Boolean,
+  mail: Boolean,
   ignoreMustache: Boolean,
   unicode: Boolean,
   customRules: Array<String>,
@@ -110,6 +111,7 @@ const urlMatcher = new UrlMatcher({
 All options are optional:
 
 * `fuzzyIp` - match 4 digits IP, which often looks like version numbers. Default: `true`
+* `mail` - match email. Default: `true`
 * `ignoreMustache` - ignore links inside mustache "{{", "}}". This is useful to work with other template library like Vue.js. Default: `false`
 * `unicode` - match unicode character. Default: `false`
 * `customRules` - a list of regex pattern (in string). E.g. `["file:///\\S+", "magnet:\\?\\S+"]`.  Default: `[]`

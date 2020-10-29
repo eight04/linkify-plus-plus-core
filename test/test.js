@@ -30,6 +30,7 @@ describe("UrlMatcher", () => {
 		match("http://example.com");
 		match("http://example.com/");
 		match("http://example.com/abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ-.~!$&*+;=:@%/?#(),'[]");
+    match("test@google.com");
 	});
 	
 	it("domain", () => {
@@ -106,5 +107,10 @@ describe("UrlMatcher", () => {
       "magnet:\\?\\S+"
     ]});
     match("magnet:?xt=urn:btih:c12fe1c06bba254a9dc9f519b335aa7c1367a88a&dn");
+  });
+  
+  it("no mail", () => {
+    const match = prepare({mail: false});
+    match.no("test@google.com");
   });
 });
