@@ -1457,10 +1457,6 @@ var linkifyPlusPlusCore = (function (exports) {
   	return true;
   }
 
-  function isDomain(d) {
-  	return /^[^.-]/.test(d) && d.indexOf("..") < 0;
-  }
-
   function inTLDS(domain) {
   	var match = domain.match(/\.([^.]+)$/);
   	if (!match) {
@@ -1480,7 +1476,8 @@ var linkifyPlusPlusCore = (function (exports) {
   	*match(text) {
   		var {
   				fuzzyIp = true,
-  				ignoreMustache = false
+  				ignoreMustache = false,
+          mail = true
   			} = this.options,
   			{
   				url,
@@ -1577,20 +1574,13 @@ var linkifyPlusPlusCore = (function (exports) {
   					}
   					continue;
   				}
-  				
-  				// check domain
-  				if (isIP(result.domain)) {
-  					if (!fuzzyIp && !result.protocol && !result.auth && !result.path) {
-  						continue;
-  					}
-  				} else if (isDomain(result.domain)) {
-  					if (!inTLDS(result.domain)) {
-  						continue;
-  					}
-  				} else {
-  					continue;
-  				}
-  				
+          
+          // ignore fuzzy ip
+  				if (!fuzzyIp && isIP(result.domain) &&
+              !result.protocol && !result.auth && !result.path) {
+            continue;
+          }
+          
   				// mailto protocol
   				if (!result.protocol && result.auth) {
   					var matchMail = result.auth.match(/^mailto:(.+)/);
@@ -1618,6 +1608,16 @@ var linkifyPlusPlusCore = (function (exports) {
   						result.protocol = "http://";
   					}
   				}
+          
+          // ignore mail
+          if (!mail && result.protocol === "mailto:") {
+            continue;
+          }
+          
+  				// verify domain
+          if (!validDomain(result.domain, result.protocol)) {
+            continue;
+          }
 
   				// Create URL
   				result.url = result.protocol + (result.auth && result.auth + "@") + result.domain + result.port + result.path;
@@ -1634,6 +1634,16 @@ var linkifyPlusPlusCore = (function (exports) {
   			mustache.lastIndex = mustacheLastIndex;
   		}
   	}
+  }
+
+  function validDomain(domain, protocol) {
+    if (isIP(domain)) return true;
+    if (domain[0] === '-' || domain[0] === '.') return false;
+    if (domain.includes('..')) return false;
+    if (/^(http|https|mailto)/.test(protocol) && !inTLDS(domain)) {
+      return false;
+    }
+    return true;
   }
 
   /**
@@ -2041,7 +2051,7 @@ var linkifyPlusPlusCore = (function (exports) {
   			link.rel = "noopener";
   		}
   		var child;
-  		if (embedImage && /^[^?#]+\.(?:jpg|png|gif|jpeg|svg)(?:$|[?#])/i.test(result.url)) {
+  		if (embedImage && /^[^?#]+\.(?:jpg|jpeg|png|apng|gif|svg|webp)(?:$|[?#])/i.test(result.url)) {
   			child = new Image;
   			child.src = result.url;
   			child.alt = result.text;
