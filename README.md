@@ -263,6 +263,13 @@ TLD count is grabbed from <http://research.domaintools.com/statistics/tld-counts
 Changelog
 ---------
 
+* 0.5.0 (Oct 29, 2020):
+
+  - Update TLDs.
+  - Add: mail option.
+  - Add: embed webp and apng.
+  - **Change: the matcher will only verify TLD if the protocol is http(s) or mailto.**
+
 * 0.4.1 (Jun 17, 2019):
 
   - Update TLDs.
