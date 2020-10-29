@@ -90,6 +90,10 @@ describe("UrlMatcher", () => {
 		match.no("http://example.call");
 		match.no("http://example.constructor");
 	});
+  
+  it("ignore bad tlds for unknown protocol", () => {
+    match("macupdater://com.busymac.busycal3");
+  });
 	
 	it("bbcode", () => {
 		match("[img]http://example.com[/img]", 5, -6);
