@@ -113,6 +113,13 @@ describe("UrlMatcher", () => {
     match("magnet:?xt=urn:btih:c12fe1c06bba254a9dc9f519b335aa7c1367a88a&dn");
   });
   
+  it("custom rules should take priority", () => {
+    const match = prepare({customRules: [
+      "http://...example\\.com"
+    ]});
+    match("http://-.-example.com", 0);
+  });
+  
   it("no mail", () => {
     const match = prepare({mail: false});
     match.no("test@google.com");
