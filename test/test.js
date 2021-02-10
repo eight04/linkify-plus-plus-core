@@ -117,4 +117,10 @@ describe("UrlMatcher", () => {
     const match = prepare({mail: false});
     match.no("test@google.com");
   });
+  
+  it("domain with dash or dot", () => {
+    match("-example.com", 1);
+    match(".example.com", 1);
+    match("-.example.com", 2);
+  });
 });
