@@ -263,6 +263,12 @@ TLD count is grabbed from <http://research.domaintools.com/statistics/tld-counts
 Changelog
 ---------
 
+* 0.5.1 (Feb 11, 2021):
+
+  - Update TLDs.
+  - Change: match custom rules first.
+  - Fix: handle invalid domains in a better way.
+
 * 0.5.0 (Oct 29, 2020):
 
   - Update TLDs.
