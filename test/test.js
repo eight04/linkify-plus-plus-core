@@ -130,4 +130,8 @@ describe("UrlMatcher", () => {
     match(".example.com", 1);
     match("-.example.com", 2);
   });
+  
+  it("infinite loop bug", () => {
+    match("example com example.-invalid.com", 21);
+  });
 });
