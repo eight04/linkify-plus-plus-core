@@ -263,6 +263,10 @@ TLD count is grabbed from <http://research.domaintools.com/statistics/tld-counts
 Changelog
 ---------
 
+* 0.5.3 (Mar 10, 2021):
+
+  - Fix: allow domains starting with digits.
+
 * 0.5.2 (Feb 12, 2021):
 
   - Fix: infinite loop bug.
