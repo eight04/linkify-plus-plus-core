@@ -134,4 +134,9 @@ describe("UrlMatcher", () => {
   it("infinite loop bug", () => {
     match("example com example.-invalid.com", 21);
   });
+  
+  it("match domains starting with numbers", () => {
+    match("https://1fichier.com");
+    match("https://9292.nl");
+  });
 });
