@@ -265,32 +265,37 @@ TLD count is grabbed from <http://research.domaintools.com/statistics/tld-counts
 Changelog
 ---------
 
-* 0.5.3 (Mar 10, 2021):
+* 0.6.0 (Feb 14, 2024)
+
+  - Add: `recursive` option in `Linkifier`.
+  - Update TLDs.
+
+* 0.5.3 (Mar 10, 2021)
 
   - Fix: allow domains starting with digits.
 
-* 0.5.2 (Feb 12, 2021):
+* 0.5.2 (Feb 12, 2021)
 
   - Fix: infinite loop bug.
 
-* 0.5.1 (Feb 11, 2021):
+* 0.5.1 (Feb 11, 2021)
 
   - Update TLDs.
   - Change: match custom rules first.
   - Fix: handle invalid domains in a better way.
 
-* 0.5.0 (Oct 29, 2020):
+* 0.5.0 (Oct 29, 2020)
 
   - Update TLDs.
   - Add: mail option.
   - Add: embed webp and apng.
   - **Change: the matcher will only verify TLD if the protocol is http(s) or mailto.**
 
-* 0.4.1 (Jun 17, 2019):
+* 0.4.1 (Jun 17, 2019)
 
   - Update TLDs.
 
-* 0.4.0 (Feb 17, 2019):
+* 0.4.0 (Feb 17, 2019)
 
   - **Breaking: drop Firefox < 56.**
   - **Breaking: drop babel.**
@@ -298,17 +303,17 @@ Changelog
   - Add: support XHTML pages.
   - Update TLDs.
 
-* 0.3.0 (Aug 23, 2017):
+* 0.3.0 (Aug 23, 2017)
 
   - **Drop: Linkifier.prototype.linkify. Now Linkifier uses event pattern.**
   - Add linkify function.
   - Update TLDs.
 
-* 0.2.0 (Mar 4, 2017):
+* 0.2.0 (Mar 4, 2017)
 
   - Use standalone build instead of require.
   - Fix: blocking bug with large element without matching urls.
 
-* 0.1.0 (Feb 23, 2017):
+* 0.1.0 (Feb 23, 2017)
 
   - First release
