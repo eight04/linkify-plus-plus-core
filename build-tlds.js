@@ -1,22 +1,13 @@
 /* eslint-env node */
-var request = require("request").defaults({
-		headers: {
-			"User-Agent": "Mozilla/5.0 (Windows NT 6.1; WOW64; rv:52.0) Gecko/20100101 Firefox/52.0"
-		}
-	}),
-	cheerio = require("cheerio"),
-	punycode = require("punycode");
+const cheerio = require("cheerio");
+const punycode = require("punycode");
 	
-function rp(url) {
-	return new Promise((resolve, reject) => {
-		request(url, (err, res, body) => {
-			if (err) {
-				reject(err);
-			} else {
-				resolve(body);
-			}
-		});
-	});
+async function rp(url) {
+  const r = await fetch(url);
+  if (!r.ok) {
+    throw new Error(`Failed to fetch ${url}`);
+  }
+  return r.text();
 }
 
 Promise.all([

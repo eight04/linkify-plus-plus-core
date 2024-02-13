@@ -17,5 +17,8 @@ module.exports = {
       sourceType: "module",
       ecmaVersion: 2019
     }
-  }]
+  }],
+  parserOptions: {
+    ecmaVersion: 2024
+  }
 };
