@@ -175,7 +175,8 @@ options: {
   root?: Element,
   embedImage?: Boolean,
   maxRunTime?: Number,
-  timeout?: Number
+  timeout?: Number,
+  recursive?: Boolean
 }
 ```
 
@@ -192,6 +193,7 @@ options: {
 * `embedImage` - create `<img>` for the link if the URL looks like an image. Default: `true`
 * `maxRunTime` - in milliseconds. The linkify process is split into small chunks to avoid blocking. This is the max execution time of each chunk. Default: `100`
 * `timeout` - in milliseconds. If linkification have processed over this value, an error is raised. Note that any heavy work between each chunks are counted as in timeout too. Default: `10000`
+* `recursive` - if true, linkify the entire node tree. Otherwise, only text nodes under `root` are linkified. Default: `true`
 
 #### linkifier.start
 

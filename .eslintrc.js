@@ -11,13 +11,6 @@ module.exports = {
 		"require": false,
 		"module": false
 	},
-  overrides: [{
-    files: ["rollup.config.js"],
-    parserOptions: {
-      sourceType: "module",
-      ecmaVersion: 2019
-    }
-  }],
   parserOptions: {
     ecmaVersion: 2024
   }
