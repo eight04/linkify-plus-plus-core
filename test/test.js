@@ -85,7 +85,8 @@ describe("UrlMatcher", () => {
 	});
 	
 	it("bad tlds", () => {
-		match.no("http://example.zip");
+    // now .zip is more common
+		// match.no("http://example.zip");
 		match.no("http://example.free");
 		match.no("http://example.call");
 		match.no("http://example.constructor");
