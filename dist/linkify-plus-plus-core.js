@@ -1891,7 +1891,8 @@ var linkifyPlusPlusCore = (function (exports) {
   	timeout: 10000,
   	newTab: true,
   	noOpener: true,
-  	embedImage: true
+  	embedImage: true,
+    recursive: true,
   };
 
   class Linkifier extends Events {
@@ -1954,7 +1955,7 @@ var linkifyPlusPlusCore = (function (exports) {
   				if (node.nodeType == 3) {
   					return NodeFilter.FILTER_ACCEPT;
   				}
-  				return NodeFilter.FILTER_SKIP;
+  				return this.options.recursive ? NodeFilter.FILTER_SKIP : NodeFilter.FILTER_REJECT;
   			}
   		};
   		// Generate linkified ranges.
