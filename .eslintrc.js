@@ -7,11 +7,15 @@ module.exports = {
 		"es6": true,
     "node": true
 	},
-	"globals": {
-		"require": false,
-		"module": false
-	},
   parserOptions: {
     ecmaVersion: 2024
-  }
+  },
+  overrides: [
+    {
+      files: ["**/__snapshots__/*.js"],
+      parserOptions: {
+        sourceType: "module"
+      }
+    }
+  ]
 };

@@ -1940,7 +1940,7 @@ var linkifyPlusPlusCore = (function (exports) {
   		this.aborted = true;
   	}
   	*generateRanges() {
-  		var {validator} = this.options;
+  		var {validator, recursive} = this.options;
   		var filter = {
   			acceptNode: function(node) {
   				if (validator && !validator(node)) {
@@ -1955,7 +1955,7 @@ var linkifyPlusPlusCore = (function (exports) {
   				if (node.nodeType == 3) {
   					return NodeFilter.FILTER_ACCEPT;
   				}
-  				return this.options.recursive ? NodeFilter.FILTER_SKIP : NodeFilter.FILTER_REJECT;
+  				return recursive ? NodeFilter.FILTER_SKIP : NodeFilter.FILTER_REJECT;
   			}
   		};
   		// Generate linkified ranges.

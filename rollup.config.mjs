@@ -8,6 +8,9 @@ export default [
     output: {file: "dist/linkify-plus-plus-core.js"}
   }),
   createConfig({
+    output: {file: "dist/linkify-plus-plus-core.esm.js", format: "es"}
+  }),
+  createConfig({
     output: {file: "dist/linkify-plus-plus-core.min.js"},
     plugins: [
       terser({

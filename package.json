@@ -15,21 +15,26 @@
   "main": "index.js",
   "repository": "eight04/linkify-plus-plus-core",
   "devDependencies": {
+    "@open-wc/testing": "^4.0.0",
     "@rollup/plugin-json": "^6.1.0",
     "@rollup/plugin-node-resolve": "^15.2.3",
     "@rollup/plugin-terser": "^0.4.4",
+    "@web/dev-server": "^0.4.2",
+    "@web/dev-server-rollup": "^0.6.1",
+    "@web/test-runner": "^0.18.0",
+    "@web/test-runner-commands": "^0.9.0",
     "c8": "^9.1.0",
     "cheerio": "^1.0.0-rc.12",
     "eslint": "^8.56.0",
     "eslint-plugin-compat": "^4.2.0",
-    "mocha": "^10.3.0",
     "rollup": "^4.10.0",
     "rollup-plugin-cjs-es": "^3.0.0"
   },
   "scripts": {
     "build-tlds": "node build-tlds.js > lib/tlds.json",
     "build": "rollup -c",
-    "test": "eslint \"**/*.js\" && c8 --reporter lcov mocha",
+    "test": "eslint . && npm run build && web-test-runner test/*",
+    "test-cover": "npm test -- --coverage",
     "preversion": "npm test",
     "version": "npm run build && git add .",
     "postversion": "git push --follow-tags && npm publish"

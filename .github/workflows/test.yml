@@ -11,7 +11,7 @@ jobs:
         with:
           node-version: '18'
       - run: npm ci
-      - run: npm test
+      - run: npm run test-cover
       - uses: codecov/codecov-action@v3
         with:
           fail_ci_if_error: true
