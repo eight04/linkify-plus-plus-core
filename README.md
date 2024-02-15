@@ -264,6 +264,10 @@ TLD count is grabbed from <http://research.domaintools.com/statistics/tld-counts
 Changelog
 ---------
 
+* 0.6.1 (Feb 16, 2024)
+
+  - Fix: options is undefined error.
+
 * 0.6.0 (Feb 14, 2024)
 
   - Add: `recursive` option in `Linkifier`.
