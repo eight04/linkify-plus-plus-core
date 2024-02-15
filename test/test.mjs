@@ -167,4 +167,23 @@ describe("Linkifier", () => {
       content: document.body.innerHTML
     });
   });
+
+  it("wbr", async () => {
+    document.body.innerHTML = "exam<wbr>ple.com";
+    await linkify(document.body, {matcher, recursive: false});
+    await compareSnapshot({
+      name: "wbr",
+      content: document.body.innerHTML
+    });
+  });
+
+  it("invalid tags", async () => {
+    document.body.innerHTML = "<script>example.com</script>";
+    await linkify(document.body, {matcher, recursive: false});
+    await compareSnapshot({
+      name: "invalid tags",
+      content: document.body.innerHTML
+    });
+  });
+
 });
