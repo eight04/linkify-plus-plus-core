@@ -1,6 +1,7 @@
-var {describe, it} = require("mocha"),
-	{UrlMatcher} = require("../lib/url-matcher"),
-	assert = require("assert");
+/* eslint-env mocha */
+import {assert} from "@open-wc/testing";
+
+import {UrlMatcher} from "../lib/url-matcher.js";
 
 describe("UrlMatcher", () => {
 	
