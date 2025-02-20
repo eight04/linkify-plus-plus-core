@@ -42,6 +42,8 @@ Promise.all([
 			.map(tld => punycode.decode(tld.substr(4)))
 	);
 
+  tlds.push("onion");
+
 	var repl = {
 		maxLength: tlds.reduce(
 			(max, tld) => tld.length > max ? tld.length : max,

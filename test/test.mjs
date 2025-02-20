@@ -142,6 +142,10 @@ describe("UrlMatcher", () => {
     match("https://1fichier.com");
     match("https://9292.nl");
   });
+
+  it("onion links", () => {
+    match("http://example.onion");
+  });
 });
 
 describe("Linkifier", () => {
