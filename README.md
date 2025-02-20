@@ -264,6 +264,11 @@ TLD count is grabbed from <http://research.domaintools.com/statistics/tld-counts
 Changelog
 ---------
 
+* 0.7.0 (Feb 20, 2025)
+
+  - Add: onion TLD.
+  - Update TLDs.
+
 * 0.6.1 (Feb 16, 2024)
 
   - Fix: options is undefined error.
