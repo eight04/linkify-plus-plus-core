@@ -1657,10 +1657,9 @@ function EventLite() {
   if (!(this instanceof EventLite)) return new EventLite();
 }
 
-const _module_ = {exports: {}};
-(function(EventLite) {
+// (function(EventLite) {
   // export the class for node.js
-  if ("undefined" !== typeof _module_) _module_.exports = EventLite;
+  // if ("undefined" !== typeof module) module.exports = EventLite;
 
   // property name to hold listeners
   var LISTENERS = "listeners";
@@ -1810,8 +1809,7 @@ const _module_ = {exports: {}};
     return listeners[type] || (listeners[type] = []);
   }
 
-})(EventLite);
-var Events = _module_.exports;
+// })(EventLite);
 
 /* eslint-env browser */
 
@@ -1892,7 +1890,7 @@ var DEFAULT_OPTIONS = {
   recursive: true,
 };
 
-class Linkifier extends Events {
+class Linkifier extends EventLite {
 	constructor(root, options = {}) {
 		super();
 		if (!(root instanceof Node)) {

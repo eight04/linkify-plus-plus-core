@@ -146,43 +146,45 @@ describe("UrlMatcher", () => {
 
 describe("Linkifier", () => {
   let matcher;
+  let body;
   before(() => {
     matcher = new UrlMatcher();
+    body = document.querySelector("body");
   });
 
   it("basic", async () => {
-    document.body.innerHTML = "example.com <span>example.com</span>";
-    await linkify(document.body, {matcher});
+    body.innerHTML = "example.com <span>example.com</span>";
+    await linkify(body, {matcher});
     await compareSnapshot({
       name: "basic",
-      content: document.body.innerHTML
+      content: body.innerHTML
     });
   });
 
   it("recursive off", async () => {
-    document.body.innerHTML = "example.com <span>example.com</span>";
-    await linkify(document.body, {matcher, recursive: false});
+    body.innerHTML = "example.com <span>example.com</span>";
+    await linkify(body, {matcher, recursive: false});
     await compareSnapshot({
       name: "recursive off",
-      content: document.body.innerHTML
+      content: body.innerHTML
     });
   });
 
   it("wbr", async () => {
-    document.body.innerHTML = "exam<wbr>ple.com";
-    await linkify(document.body, {matcher, recursive: false});
+    body.innerHTML = "exam<wbr>ple.com";
+    await linkify(body, {matcher, recursive: false});
     await compareSnapshot({
       name: "wbr",
-      content: document.body.innerHTML
+      content: body.innerHTML
     });
   });
 
   it("invalid tags", async () => {
-    document.body.innerHTML = "<script>example.com</script>";
-    await linkify(document.body, {matcher, recursive: false});
+    body.innerHTML = "<script>example.com</script>";
+    await linkify(body, {matcher, recursive: false});
     await compareSnapshot({
       name: "invalid tags",
-      content: document.body.innerHTML
+      content: body.innerHTML
     });
   });
 
