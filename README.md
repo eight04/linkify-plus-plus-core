@@ -100,7 +100,7 @@ const urlMatcher = new UrlMatcher({
   mail: Boolean,
   ignoreMustache: Boolean,
   unicode: Boolean,
-  customRules: Array<String>,
+  customRules: Array<{pattern: string, replace?: string}>,
   standalone: Boolean,
   boundaryLeft: String,
   boundaryRight: String
@@ -113,7 +113,7 @@ All options are optional:
 * `mail` - match email. Default: `true`
 * `ignoreMustache` - ignore links inside mustache "{{", "}}". This is useful to work with other template library like Vue.js. Default: `false`
 * `unicode` - match unicode character. Default: `false`
-* `customRules` - a list of regex pattern (in string). E.g. `["file:///\\S+", "magnet:\\?\\S+"]`.  Default: `[]`
+* `customRules` - add custom regex with optional replacement string. The replacement string is used to generate `matchResult.url`. Example: `[{pattern: "magnet:\\?\\S+"}, {pattern: "(\\d{10})", replace: "tel:+$1"}]`. Default: `[]`
 * `standalone` - the link must be surrounded by whitespace. Default: `false`
 * `boundaryLeft` - has no effect without the `standalone` option. Allow some characters to be placed between whitespace and link. Some common characters are `{[("'`. Default: `""`
 * `boundaryRight` - has no effect without the `standalone` option. Allow some characters to be placed between whitespace and link. Some common characters are `'")]},.;?!`. Default: `""`
