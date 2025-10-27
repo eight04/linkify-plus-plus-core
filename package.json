@@ -41,7 +41,8 @@
     "postversion": "git push --follow-tags && npm publish"
   },
   "dependencies": {
-    "event-lite": "^1.0.0"
+    "event-lite": "^1.0.0",
+    "multi-re": "^0.2.0"
   },
   "browserslist": [
     "Firefox >= 56"
