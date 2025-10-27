@@ -87,9 +87,6 @@ describe("UrlMatcher", () => {
 	});
 	
 	it("bad tlds", () => {
-    // now .zip is more common
-		// match.no("http://example.zip");
-		match.no("http://example.free");
 		match.no("http://example.call");
 		match.no("http://example.constructor");
 	});
@@ -121,6 +118,17 @@ describe("UrlMatcher", () => {
       "http://...example\\.com"
     ]});
     match("http://-.-example.com", 0);
+  });
+
+  it("custom rules with replace", () => {
+    const match = prepare({customRules: [
+      {
+        pattern: "(http://)...(example)\\.com",
+        replace: "$1$2.org"
+      }
+    ]});
+    const r = match("http://-.-example.com", 0);
+    assert.equal(r.url, "http://example.org");
   });
   
   it("no mail", () => {

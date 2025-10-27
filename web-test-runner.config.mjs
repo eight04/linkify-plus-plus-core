@@ -1,8 +1,22 @@
 // import { fromRollup } from '@web/dev-server-rollup';
 // import cjs from 'rollup-plugin-cjs-es';
+// import {playwrightLauncher} from '@web/test-runner-playwright';
+import {puppeteerLauncher} from '@web/test-runner-puppeteer';
+
+const launchOptions = process.env.CI ? {
+  args: ['--no-sandbox', '--disable-setuid-sandbox'],
+} : {};
 
 export default {
   nodeResolve: true,
+  browsers: [
+    puppeteerLauncher({
+      launchOptions
+    }),
+  ]
+  // browsers: [
+  //   playwrightLauncher({product: 'firefox'}),
+  // ]
   // FIXME: https://github.com/modernweb-dev/web/issues/2637
   // coverageConfig: {
   //   exclude: [

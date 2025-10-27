@@ -1,5 +1,94 @@
+/**
+ * Evaluate the replacement string/function with the given match and group info.
+ *
+ * @param {string|Function} repl - The replacement string or function.
+ * @param {RegExpMatchArray} match - The match array.
+ * @param {{offset: number, length?: number}} groupInfo - Information about the capturing groups. If repl is a string, length is optional.
+ * @returns {string} The result.
+ */
+function evalRepl(repl, match, groupInfo) {
+  if (typeof repl === 'function') {
+    return repl(match[0], ...match.slice(groupInfo.offset + 1, groupInfo.offset + 1 + groupInfo.length));
+  }
+  return repl.replace(/\$([0-9]+|&)/g, (_, g1) => {
+    if (g1 === '&') {
+      return match[0];
+    }
+    const index = Number(g1);
+    return match[groupInfo.offset + index] || '';
+  });
+}
+
+/**
+ * @typedef {object} GroupInfo
+ * @property {string[]} names - The names of the capturing groups.
+ * @property {number} length - The number of capturing groups.
+ * @property {number} offset - The offset of the group indexes in the combined RegExp. Use `match[info.offset + n]` to access the nth capturing group of the pattern. When `captureAll` is true, `match[info.offset + 0]` is the extra capturing group added to detect which pattern matched.
+ */
+
+/**
+ * @typedef {object} CompileOptions
+ * @property {string} [flags] - The flags for the RegExp.
+ * @property {boolean} [captureAll] - If true (default), add capture group to each pattern to detect which pattern matched.
+ * @property {string} [prefix] - Prefix the entire regex. This shouldn't contain capturing groups.
+ * @property {string} [suffix] - Suffix the entire regex. This shouldn't contain capturing groups.
+ */
+
+/**
+ * Compiles multiple patterns into a single RegExp.
+ *
+ * @param {Array<string>} patterns - An array of regex pattern strings.
+ * @param {string|CompileOptions} [flagsOrOptions] - Optional flags for the RegExp.
+ * @returns {[RegExp, groupInfos: GroupInfo[]]} A RegExp that matches any of the provided patterns. groupInfos contains information about the capturing groups of each pattern.
+ */
+function compile(patterns, flagsOrOptions) {
+  let options;
+  if (typeof flagsOrOptions === 'string' || flagsOrOptions === undefined) {
+    options = {flags: flagsOrOptions};
+  } else {
+    options = flagsOrOptions;
+  }
+  if (options.captureAll === undefined) {
+    options.captureAll = true;
+  }
+  const infos = patterns.map(p => analyzeRe(p));
+  infos[0].offset = options.captureAll ? 1 : 0;
+  for (let i = 1; i < infos.length; i++) {
+    infos[i].offset = infos[i - 1].offset + infos[i - 1].length + (options.captureAll ? 1 : 0);
+  }
+  for (let i = 0; i < patterns.length; i++) {
+    // rewrite backreferences in pattern
+    patterns[i] = patterns[i].replace(/\\(\d+)/g, (match, g1) => {
+      const originalIndex = Number(g1);
+      const newIndex = originalIndex + infos[i].offset;
+      return `\\${newIndex}`;
+    });
+  }
+  let pattern = patterns.map((pat) => {
+    if (options.captureAll) {
+      return `(${pat})`;
+    }
+    return pat;
+  }).join('|');
+  if (options.prefix || options.suffix) {
+    pattern = `${options.prefix || ''}(?:${pattern})${options.suffix || ''}`;
+  }
+  const rx = new RegExp(pattern, options.flags);
+  return [rx, infos];
+}
+
+function analyzeRe(source) {
+  const re = new RegExp(source + '|');
+  const match = re.exec('');
+  return {
+    names: re.groups ? Object.keys(re.groups) : [],
+    length: match.length - 1,
+    offset: 0,
+  };
+}
+
 var maxLength = 24;
-var chars = "セール佛山ಭಾರತ集团在线한국ଭାରତভাৰতর八卦ישראלموقعবংল公司网站移动我爱你москвақзнлйт联通рбгеקוםファッションストアசிங்கபூர商标店城дию家電中文信国國娱乐భారత్ලංකා购物クラウドભારતभारतम्ोसंगठन餐厅络у香港食品飞利浦台湾灣手机الجزئرنیتبيپکسدغظحةڀ澳門닷컴شكგე构健康ไทย招聘фລາວみんなευλ世界書籍ഭാരതംਭਾਰਤ址넷コム游戏ö企业息صط广东இலைநதயாհայ新加坡ف政务";
+var chars = "セール佛山ಭಾರತ集团在线한국ଭାରତভাৰতর八卦ישראלموقعবংল公益司网站移动我爱你москвақзнлйт联通рбгеקוםファッションストアசிங்கபூர商标店城дию家電中文信国國娱乐భారత్ලංකා购物クラウドભારતभारतम्ोसंगठन餐厅络у香港食品飞利浦台湾灣手机الجزئرنیتبيپکسدغظحةڀ澳門닷컴شكგე构健康ไทย招聘фລາວみんなευλ世界書籍ഭാരതംਭਾਰਤ址넷コム游戏ö企业息صط广东இலைநதயாհայ新加坡ف政务";
 var table = {
 	aaa: true,
 	aarp: true,
@@ -98,7 +187,6 @@ var table = {
 	be: true,
 	beauty: true,
 	beer: true,
-	bentley: true,
 	berlin: true,
 	best: true,
 	bet: true,
@@ -120,6 +208,7 @@ var table = {
 	bloomberg: true,
 	blue: true,
 	bm: true,
+	bms: true,
 	bmw: true,
 	bn: true,
 	bnpparibas: true,
@@ -293,6 +382,7 @@ var table = {
 	dvag: true,
 	dz: true,
 	earth: true,
+	eat: true,
 	ec: true,
 	eco: true,
 	edeka: true,
@@ -332,6 +422,7 @@ var table = {
 	fans: true,
 	farm: true,
 	fashion: true,
+	fast: true,
 	feedback: true,
 	ferrero: true,
 	fi: true,
@@ -350,6 +441,7 @@ var table = {
 	flir: true,
 	florist: true,
 	flowers: true,
+	fly: true,
 	fm: true,
 	fo: true,
 	foo: true,
@@ -362,6 +454,7 @@ var table = {
 	foundation: true,
 	fox: true,
 	fr: true,
+	free: true,
 	fresenius: true,
 	frl: true,
 	frogans: true,
@@ -431,6 +524,7 @@ var table = {
 	hair: true,
 	hamburg: true,
 	haus: true,
+	hbo: true,
 	health: true,
 	healthcare: true,
 	help: true,
@@ -453,6 +547,7 @@ var table = {
 	hospital: true,
 	host: true,
 	hosting: true,
+	hot: true,
 	hotmail: true,
 	house: true,
 	how: true,
@@ -543,7 +638,6 @@ var table = {
 	kz: true,
 	la: true,
 	lamborghini: true,
-	lancaster: true,
 	land: true,
 	landrover: true,
 	lanxess: true,
@@ -631,6 +725,7 @@ var table = {
 	mn: true,
 	mo: true,
 	mobi: true,
+	mobile: true,
 	moda: true,
 	moe: true,
 	moi: true,
@@ -784,7 +879,6 @@ var table = {
 	realty: true,
 	recipes: true,
 	red: true,
-	redstone: true,
 	rehab: true,
 	reise: true,
 	reisen: true,
@@ -843,6 +937,7 @@ var table = {
 	se: true,
 	seat: true,
 	security: true,
+	seek: true,
 	select: true,
 	sener: true,
 	services: true,
@@ -886,6 +981,7 @@ var table = {
 	spa: true,
 	space: true,
 	sport: true,
+	spot: true,
 	sr: true,
 	srl: true,
 	ss: true,
@@ -918,6 +1014,7 @@ var table = {
 	systems: true,
 	sz: true,
 	taipei: true,
+	talk: true,
 	target: true,
 	tatamotors: true,
 	tatar: true,
@@ -1007,6 +1104,7 @@ var table = {
 	vlaanderen: true,
 	vn: true,
 	vodka: true,
+	volvo: true,
 	vote: true,
 	voting: true,
 	voto: true,
@@ -1053,6 +1151,7 @@ var table = {
 	"xn--4dbrk0ce": true,
 	"xn--4gbrim": true,
 	"xn--54b7fta0cc": true,
+	"xn--55qw42g": true,
 	"xn--55qx5d": true,
 	"xn--5tzm5g": true,
 	"xn--6frz82g": true,
@@ -1164,6 +1263,7 @@ var table = {
 	yodobashi: true,
 	yoga: true,
 	yokohama: true,
+	you: true,
 	youtube: true,
 	yt: true,
 	za: true,
@@ -1187,6 +1287,7 @@ var table = {
 	"ישראל": true,
 	"موقع": true,
 	"বাংলা": true,
+	"公益": true,
 	"公司": true,
 	"网站": true,
 	"移动": true,
@@ -1309,7 +1410,7 @@ function regexEscape(text) {
 
 function buildRegex({
 	unicode = false, customRules = [], standalone = false,
-	boundaryLeft, boundaryRight
+	boundaryLeft, boundaryRight, ignoreMustache = false
 }) {
 	var pattern = RE.PROTOCOL + RE.USER;
 	
@@ -1319,36 +1420,36 @@ function buildRegex({
 		pattern += RE.DOMAIN + RE.PORT + RE.PATH;
 	}
 	
-	if (customRules.length) {
-		pattern = "(?:(" + customRules.join("|") + ")|" + pattern + ")";
-	} else {
-		pattern = "()" + pattern;
-	}
-	
 	var prefix, suffix, invalidSuffix;
 	if (standalone) {
 		if (boundaryLeft) {
-			prefix = "((?:^|\\s)[" + regexEscape(boundaryLeft) + "]*?)";
+			prefix = "(?:^|\\s)[" + regexEscape(boundaryLeft) + "]*";
 		} else {
-			prefix = "(^|\\s)";
+			prefix = "(?:^|\\s)";
 		}
 		if (boundaryRight) {
-			suffix = "([" + regexEscape(boundaryRight) + "]*(?:$|\\s))";
+			suffix = "[" + regexEscape(boundaryRight) + "]*(?:$|\\s)";
 		} else {
-			suffix = "($|\\s)";
+			suffix = "(?:$|\\s)";
 		}
 		invalidSuffix = "[^\\s" + regexEscape(boundaryRight) + "]";
 	} else {
-		prefix = "(^|\\b|_)";
-		suffix = "()";
+		prefix = "\\b"; // NOTE: \b won't match between non-word characters (e.g. / or .) so we don't use it in suffix
+		suffix = "";
 	}
-	
-	pattern = prefix + pattern + suffix;
-	
+
+  const [rx, groupInfos] = compile([
+    ...customRules.map(r => `(${prefix})(${r.pattern})(${suffix})`),
+    ignoreMustache ? /(\{\{[\s\S]+?\}\})/.source : '((?!))',
+    `(${prefix})${pattern}(${suffix})`
+  ], {
+    flags: "igm",
+    captureAll: false
+  });
 	return {
-		url: new RegExp(pattern, "igm"),
+    url: rx,
+    groupInfos,
 		invalidSuffix: invalidSuffix && new RegExp(invalidSuffix),
-		mustache: /\{\{[\s\S]+?\}\}/g
 	};
 }
 
@@ -1438,6 +1539,21 @@ function inTLDS(domain) {
 
 class UrlMatcher {
 	constructor(options = {}) {
+    if (options.customRules) {
+      options.customRules = options.customRules.map(rule => {
+        if (typeof rule === "string") {
+          return {
+            pattern: rule,
+            replace: null
+          }
+        }
+        return {
+          pattern: rule.pattern,
+          replace: rule.replace || null
+        }
+      });
+    }
+
 		this.options = options;
 		this.regex = buildRegex(options);
 	}
@@ -1445,75 +1561,69 @@ class UrlMatcher {
 	*match(text) {
 		var {
 				fuzzyIp = true,
-				ignoreMustache = false,
         mail = true
 			} = this.options,
 			{
 				url,
+        groupInfos,
 				invalidSuffix,
-				mustache
 			} = this.regex,
-			urlLastIndex, mustacheLastIndex;
+			urlLastIndex;
 			
-		mustache.lastIndex = 0;
 		url.lastIndex = 0;
 		
-		var mustacheMatch, mustacheRange;
-		if (ignoreMustache) {
-			mustacheMatch = mustache.exec(text);
-			if (mustacheMatch) {
-				mustacheRange = {
-					start: mustacheMatch.index,
-					end: mustache.lastIndex
-				};
-			}
-		}
-		
 		var urlMatch;
+    const urlGroupOffset = groupInfos[groupInfos.length - 1].offset;
+    const mustacheGroupOffset = groupInfos[groupInfos.length - 2].offset;
 		while ((urlMatch = url.exec(text))) {
       const result = {
-        start: 0,
-        end: 0,
+        custom: false,
+
+        start: urlMatch.index,
+        end: url.lastIndex,
         
         text: "",
         url: "",
-        
-        prefix: urlMatch[1],
-        custom: urlMatch[2],
-        protocol: urlMatch[3],
-        auth: urlMatch[4] || "",
-        domain: urlMatch[5],
-        port: urlMatch[6] || "",
-        path: urlMatch[7] || "",
-        suffix: urlMatch[8]
+
+        prefix: urlMatch[urlGroupOffset + 1] || "", // NOTE: this prefix/suffix only exists when url is matched
+        protocol: urlMatch[urlGroupOffset + 2] || "",
+        auth: urlMatch[urlGroupOffset + 3] || "",
+        domain: urlMatch[urlGroupOffset + 4] || "",
+        port: urlMatch[urlGroupOffset + 5] || "",
+        path: urlMatch[urlGroupOffset + 6] || "",
+        suffix: urlMatch[urlGroupOffset + 7] || "",
+
+        mustache: urlMatch[mustacheGroupOffset + 1] || null,
       };
+
+      if (result.mustache) {
+        // mustache matched, skip
+        continue;
+      }
       
-      if (result.custom) {
-        result.start = urlMatch.index;
-        result.end = url.lastIndex;
-        result.text = result.url = urlMatch[0];
+      if (!result.domain) {
+        // custom rule matched
+        const patternIndex = groupInfos.findIndex(gi => {
+          return urlMatch[gi.offset + 2] !== undefined;
+        });
+        const gi = groupInfos[patternIndex];
+        result.custom = true;
+        result.start += urlMatch[gi.offset + 1].length; // prefix
+        result.end -= urlMatch[gi.offset + gi.length].length; // suffix
+        result.text = urlMatch[gi.offset + 2]; // middle
+        let url;
+        const customRule = this.options.customRules[patternIndex];
+        if (customRule.replace) {
+          url = evalRepl(customRule.replace, urlMatch, {
+            offset: gi.offset + 2 // skip prefix and middle group
+          });
+        } else {
+          url = result.text;
+        }
+        result.url = url;
 			} else {
-        
-        result.start = urlMatch.index + result.prefix.length;
-        result.end = url.lastIndex - result.suffix.length;
-			}
-			
-			if (mustacheRange && mustacheRange.end <= result.start) {
-				mustacheMatch = mustache.exec(text);
-				if (mustacheMatch) {
-					mustacheRange.start = mustacheMatch.index;
-					mustacheRange.end = mustache.lastIndex;
-				} else {
-					mustacheRange = null;
-				}
-			}
-			
-			// ignore urls inside mustache pair
-			if (mustacheRange && result.start < mustacheRange.end && result.end >= mustacheRange.start) {
-				continue;
-			}
-			
-			if (!result.custom) {
+        result.start += result.prefix.length;
+        result.end -= result.suffix.length;
 				// adjust path and suffix
 				if (result.path) {
 					// Strip BBCode
@@ -1532,6 +1642,7 @@ class UrlMatcher {
 					pathStrip(result, /(^|[^-_])[.,?]+$/, "$1");
 				}
 				
+        // FIXME: what is this?
 				// check suffix
 				if (invalidSuffix && invalidSuffix.test(result.suffix)) {
 					if (/\s$/.test(result.suffix)) {
@@ -1598,13 +1709,11 @@ class UrlMatcher {
 			}
 			
 			// since regex is shared with other parse generators, cache lastIndex position and restore later
-			mustacheLastIndex = mustache.lastIndex;
 			urlLastIndex = url.lastIndex;
 			
 			yield result;
 			
 			url.lastIndex = urlLastIndex;
-			mustache.lastIndex = mustacheLastIndex;
 		}
 	}
 }
