@@ -119,6 +119,17 @@ describe("UrlMatcher", () => {
     ]});
     match("http://-.-example.com", 0);
   });
+
+  it("custom rules with replace", () => {
+    const match = prepare({customRules: [
+      {
+        pattern: "(http://)...(example)\\.com",
+        replace: "$1$2.org"
+      }
+    ]});
+    const r = match("http://-.-example.com", 0);
+    assert.equal(r.url, "http://example.org");
+  });
   
   it("no mail", () => {
     const match = prepare({mail: false});
