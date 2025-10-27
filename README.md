@@ -264,6 +264,12 @@ TLD count is grabbed from <http://research.domaintools.com/statistics/tld-counts
 Changelog
 ---------
 
+* 0.8.0 (Oct 27, 2025)
+
+  - **Breaking: change `customRules` shape.**
+  - Add: `replace` property to custom rules for URL transformation.
+  - Update TLDs.
+
 * 0.7.0 (Feb 20, 2025)
 
   - Add: onion TLD.
