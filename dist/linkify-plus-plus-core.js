@@ -1607,7 +1607,7 @@ var linkifyPlusPlusCore = (function (exports) {
         if (!result.domain) {
           // custom rule matched
           const patternIndex = groupInfos.findIndex(gi => {
-            return urlMatch[gi.offset] !== undefined;
+            return urlMatch[gi.offset + 2] !== undefined;
           });
           const gi = groupInfos[patternIndex];
           result.custom = true;
