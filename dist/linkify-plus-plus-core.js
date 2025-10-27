@@ -1582,13 +1582,13 @@ var linkifyPlusPlusCore = (function (exports) {
         const result = {
           custom: false,
 
-          start: 0,
-          end: 0,
+          start: urlMatch.index,
+          end: url.lastIndex,
           
           text: "",
           url: "",
 
-          prefix: urlMatch[urlGroupOffset + 1] || "",
+          prefix: urlMatch[urlGroupOffset + 1] || "", // NOTE: this prefix/suffix only exists when url is matched
           protocol: urlMatch[urlGroupOffset + 2] || "",
           auth: urlMatch[urlGroupOffset + 3] || "",
           domain: urlMatch[urlGroupOffset + 4] || "",
@@ -1604,27 +1604,29 @@ var linkifyPlusPlusCore = (function (exports) {
           continue;
         }
         
-        result.start = urlMatch.index + result.prefix.length;
-        result.end = url.lastIndex - result.suffix.length;
-
         if (!result.domain) {
           // custom rule matched
           const patternIndex = groupInfos.findIndex(gi => {
             return urlMatch[gi.offset] !== undefined;
           });
+          const gi = groupInfos[patternIndex];
           result.custom = true;
-          result.text = urlMatch[groupInfos[patternIndex].offset + 3];
+          result.start += urlMatch[gi.offset + 1].length; // prefix
+          result.end -= urlMatch[gi.offset + gi.length].length; // suffix
+          result.text = urlMatch[gi.offset + 2]; // middle
           let url;
           const customRule = this.options.customRules[patternIndex];
           if (customRule.replace) {
             url = evalRepl(customRule.replace, urlMatch, {
-              offset: groupInfos[patternIndex].offset + 2 // skip prefix and middle group
+              offset: gi.offset + 2 // skip prefix and middle group
             });
           } else {
             url = result.text;
           }
           result.url = url;
   			} else {
+          result.start += result.prefix.length;
+          result.end -= result.suffix.length;
   				// adjust path and suffix
   				if (result.path) {
   					// Strip BBCode
