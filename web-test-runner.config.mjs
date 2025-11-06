@@ -9,6 +9,7 @@ const launchOptions = process.env.CI ? {
 
 export default {
   nodeResolve: true,
+  browserStartTimeout: 120000,
   browsers: [
     puppeteerLauncher({
       launchOptions

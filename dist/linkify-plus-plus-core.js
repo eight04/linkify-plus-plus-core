@@ -1396,16 +1396,22 @@ var linkifyPlusPlusCore = (function (exports) {
   	onion: true
   };
 
-  var RE = {
-  		PROTOCOL: "([a-z][-a-z*]+://)?",
-  		USER: "(?:([\\w:.+-]+)@)?",
-  		DOMAIN_UNI: `([a-z0-9-.\\u00A0-\\uFFFF]+\\.[a-z0-9-${chars}]{1,${maxLength}})`,
-  		DOMAIN: `([a-z0-9-.]+\\.[a-z0-9-]{1,${maxLength}})`,
-  		PORT: "(:\\d+\\b)?",
-  		PATH_UNI: "([/?#]\\S*)?",
-  		PATH: "([/?#][\\w-.~!$&*+;=:@%/?#(),'\\[\\]]*)?"
-  	},
-  	TLD_TABLE = table;
+  var _require__$rx_ = {
+    IMAGE: /^[^?#]+\.(?:jpg|jpeg|png|apng|gif|svg|webp|avif)(?:$|[?#])/i,
+    PROTOCOL: /([a-z][-a-z*]+:\/\/)?/i,
+    USER: /(?:([\w:.+-]+)@)?/i,
+    DOMAIN_UNI: new RegExp(`([a-z0-9-.\\u00A0-\\uFFFF]+\\.[a-z0-9-${chars}]{1,${maxLength}})`, "i"),
+    DOMAIN: new RegExp(`([a-z0-9-.]+\\.[a-z0-9-]{1,${maxLength}})`, "i"),
+    PORT: /(:\d+\b)?/,
+    PATH_UNI: /([/?#]\S*)?/,
+    PATH: /([/?#][\w-.~!$&*+;=:@%/?#(),'[\]]*)?/
+  };
+
+  const RE = {};
+
+  for (const key in _require__$rx_) {
+    RE[key] = _require__$rx_[key].source;
+  }
 
   function regexEscape(text) {
   	return text.replace(/[[\]\\^-]/g, "\\$&");
@@ -1537,7 +1543,7 @@ var linkifyPlusPlusCore = (function (exports) {
   	}
   	var key = match[1].toLowerCase();
     // eslint-disable-next-line no-prototype-builtins
-  	return TLD_TABLE.hasOwnProperty(key);
+  	return table.hasOwnProperty(key);
   }
 
   class UrlMatcher {
@@ -1924,6 +1930,7 @@ var linkifyPlusPlusCore = (function (exports) {
 
   /* eslint-env browser */
 
+  const {IMAGE} = _require__$rx_;
 
   var INVALID_TAGS = {
   	a: true,
@@ -2146,7 +2153,7 @@ var linkifyPlusPlusCore = (function (exports) {
   			link.rel = "noopener";
   		}
   		var child;
-  		if (embedImage && /^[^?#]+\.(?:jpg|jpeg|png|apng|gif|svg|webp)(?:$|[?#])/i.test(result.url)) {
+  		if (embedImage && IMAGE.test(result.url)) {
   			child = new Image;
   			child.src = result.url;
   			child.alt = result.text;
