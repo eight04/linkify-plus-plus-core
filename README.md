@@ -264,6 +264,10 @@ TLD count is grabbed from <http://research.domaintools.com/statistics/tld-counts
 Changelog
 ---------
 
+* 0.8.2 (Nov 7, 2025)
+
+  - Fix: improve tree shaking in `lib/rx.js`.
+
 * 0.8.1 (Nov 6, 2025)
 
   - Refactor: add `lib/rx.js` for regex related utilities.
