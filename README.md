@@ -264,6 +264,10 @@ TLD count is grabbed from <http://research.domaintools.com/statistics/tld-counts
 Changelog
 ---------
 
+* 0.8.1 (Nov 6, 2025)
+
+  - Refactor: add `lib/rx.js` for regex related utilities.
+
 * 0.8.0 (Oct 27, 2025)
 
   - **Breaking: change `customRules` shape.**
