@@ -1393,25 +1393,32 @@ var table = {
 	onion: true
 };
 
-let _module_exports_ = {};
+const IMAGE$1 = /^[^?#]+\.(?:jpg|jpeg|png|apng|gif|svg|webp|avif)(?:$|[?#])/i;
+const PROTOCOL = /([a-z][-a-z*]+:\/\/)?/i;
+const USER = /(?:([\w:.+-]+)@)?/i;
+const DOMAIN_UNI = new RegExp(String.raw`([a-z0-9-.\u00A0-\uFFFF]+\.[a-z0-9-${chars}]{1,${maxLength}})`, "i");
+const DOMAIN = new RegExp(String.raw`([a-z0-9-.]+\.[a-z0-9-]{1,${maxLength}})`, "i");
+const PORT = /(:\d+\b)?/;
+const PATH_UNI = /([/?#]\S*);/;
+const PATH = /([/?#][\w-.~!$&*+;=:@%/?#(),'[\]]*)?/;
+const URL = new RegExp(String.raw`https?://${USER.source}${DOMAIN.source}${PORT.source}${PATH.source}`, "i");
 
-_module_exports_ = {
-  IMAGE: /^[^?#]+\.(?:jpg|jpeg|png|apng|gif|svg|webp|avif)(?:$|[?#])/i,
-  PROTOCOL: /([a-z][-a-z*]+:\/\/)?/i,
-  USER: /(?:([\w:.+-]+)@)?/i,
-  DOMAIN_UNI: new RegExp(String.raw`([a-z0-9-.\u00A0-\uFFFF]+\.[a-z0-9-${chars}]{1,${maxLength}})`, "i"),
-  DOMAIN: new RegExp(String.raw`([a-z0-9-.]+\.[a-z0-9-]{1,${maxLength}})`, "i"),
-  PORT: /(:\d+\b)?/,
-  PATH_UNI: /([/?#]\S*)?/,
-  PATH: /([/?#][\w-.~!$&*+;=:@%/?#(),'[\]]*)?/
+var _require__$rx_ = {
+  IMAGE: IMAGE$1,
+  PROTOCOL,
+  USER,
+  DOMAIN_UNI,
+  DOMAIN,
+  PORT,
+  PATH_UNI,
+  PATH,
+  URL
 };
-
-_module_exports_.URL = new RegExp(String.raw`https?://${_module_exports_.USER.source}${_module_exports_.DOMAIN.source}${_module_exports_.PORT.source}${_module_exports_.PATH.source}`, "i");
 
 const RE = {};
 
-for (const key in _module_exports_) {
-  RE[key] = _module_exports_[key].source;
+for (const key in _require__$rx_) {
+  RE[key] = _require__$rx_[key].source;
 }
 
 function regexEscape(text) {
@@ -1931,7 +1938,7 @@ function EventLite() {
 
 /* eslint-env browser */
 
-const {IMAGE} = _module_exports_;
+const {IMAGE} = _require__$rx_;
 
 var INVALID_TAGS = {
 	a: true,
