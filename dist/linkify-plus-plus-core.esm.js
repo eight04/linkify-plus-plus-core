@@ -1393,16 +1393,26 @@ var table = {
 	onion: true
 };
 
-var RE = {
-		PROTOCOL: "([a-z][-a-z*]+://)?",
-		USER: "(?:([\\w:.+-]+)@)?",
-		DOMAIN_UNI: `([a-z0-9-.\\u00A0-\\uFFFF]+\\.[a-z0-9-${chars}]{1,${maxLength}})`,
-		DOMAIN: `([a-z0-9-.]+\\.[a-z0-9-]{1,${maxLength}})`,
-		PORT: "(:\\d+\\b)?",
-		PATH_UNI: "([/?#]\\S*)?",
-		PATH: "([/?#][\\w-.~!$&*+;=:@%/?#(),'\\[\\]]*)?"
-	},
-	TLD_TABLE = table;
+let _module_exports_ = {};
+
+_module_exports_ = {
+  IMAGE: /^[^?#]+\.(?:jpg|jpeg|png|apng|gif|svg|webp|avif)(?:$|[?#])/i,
+  PROTOCOL: /([a-z][-a-z*]+:\/\/)?/i,
+  USER: /(?:([\w:.+-]+)@)?/i,
+  DOMAIN_UNI: new RegExp(String.raw`([a-z0-9-.\u00A0-\uFFFF]+\.[a-z0-9-${chars}]{1,${maxLength}})`, "i"),
+  DOMAIN: new RegExp(String.raw`([a-z0-9-.]+\.[a-z0-9-]{1,${maxLength}})`, "i"),
+  PORT: /(:\d+\b)?/,
+  PATH_UNI: /([/?#]\S*)?/,
+  PATH: /([/?#][\w-.~!$&*+;=:@%/?#(),'[\]]*)?/
+};
+
+_module_exports_.URL = new RegExp(String.raw`https?://${_module_exports_.USER.source}${_module_exports_.DOMAIN.source}${_module_exports_.PORT.source}${_module_exports_.PATH.source}`, "i");
+
+const RE = {};
+
+for (const key in _module_exports_) {
+  RE[key] = _module_exports_[key].source;
+}
 
 function regexEscape(text) {
 	return text.replace(/[[\]\\^-]/g, "\\$&");
@@ -1534,7 +1544,7 @@ function inTLDS(domain) {
 	}
 	var key = match[1].toLowerCase();
   // eslint-disable-next-line no-prototype-builtins
-	return TLD_TABLE.hasOwnProperty(key);
+	return table.hasOwnProperty(key);
 }
 
 class UrlMatcher {
@@ -1921,6 +1931,7 @@ function EventLite() {
 
 /* eslint-env browser */
 
+const {IMAGE} = _module_exports_;
 
 var INVALID_TAGS = {
 	a: true,
@@ -2143,7 +2154,7 @@ class Linkifier extends EventLite {
 			link.rel = "noopener";
 		}
 		var child;
-		if (embedImage && /^[^?#]+\.(?:jpg|jpeg|png|apng|gif|svg|webp)(?:$|[?#])/i.test(result.url)) {
+		if (embedImage && IMAGE.test(result.url)) {
 			child = new Image;
 			child.src = result.url;
 			child.alt = result.text;
