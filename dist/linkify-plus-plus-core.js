@@ -1396,21 +1396,25 @@ var linkifyPlusPlusCore = (function (exports) {
   	onion: true
   };
 
-  var _require__$rx_ = {
+  let _module_exports_ = {};
+
+  _module_exports_ = {
     IMAGE: /^[^?#]+\.(?:jpg|jpeg|png|apng|gif|svg|webp|avif)(?:$|[?#])/i,
     PROTOCOL: /([a-z][-a-z*]+:\/\/)?/i,
     USER: /(?:([\w:.+-]+)@)?/i,
-    DOMAIN_UNI: new RegExp(`([a-z0-9-.\\u00A0-\\uFFFF]+\\.[a-z0-9-${chars}]{1,${maxLength}})`, "i"),
-    DOMAIN: new RegExp(`([a-z0-9-.]+\\.[a-z0-9-]{1,${maxLength}})`, "i"),
+    DOMAIN_UNI: new RegExp(String.raw`([a-z0-9-.\u00A0-\uFFFF]+\.[a-z0-9-${chars}]{1,${maxLength}})`, "i"),
+    DOMAIN: new RegExp(String.raw`([a-z0-9-.]+\.[a-z0-9-]{1,${maxLength}})`, "i"),
     PORT: /(:\d+\b)?/,
     PATH_UNI: /([/?#]\S*)?/,
     PATH: /([/?#][\w-.~!$&*+;=:@%/?#(),'[\]]*)?/
   };
 
+  _module_exports_.URL = new RegExp(String.raw`https?://${_module_exports_.USER.source}${_module_exports_.DOMAIN.source}${_module_exports_.PORT.source}${_module_exports_.PATH.source}`, "i");
+
   const RE = {};
 
-  for (const key in _require__$rx_) {
-    RE[key] = _require__$rx_[key].source;
+  for (const key in _module_exports_) {
+    RE[key] = _module_exports_[key].source;
   }
 
   function regexEscape(text) {
@@ -1930,7 +1934,7 @@ var linkifyPlusPlusCore = (function (exports) {
 
   /* eslint-env browser */
 
-  const {IMAGE} = _require__$rx_;
+  const {IMAGE} = _module_exports_;
 
   var INVALID_TAGS = {
   	a: true,
