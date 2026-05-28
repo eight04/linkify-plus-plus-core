@@ -6,12 +6,14 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v3
-      - uses: actions/setup-node@v3
+      - uses: actions/checkout@v6
+      - uses: actions/setup-node@v6
         with:
-          node-version: '18'
+          node-version: '22'
+      # FIXME: run npm ci in parallel on Github action breaks puppeteer with `Could not find Chrome` error. Something to do with the cache?
+      # this bug? https://github.com/pa11y/pa11y/issues/824
       - run: npm ci
-      - run: npm run test-cover
+      - run: npm test
       - uses: codecov/codecov-action@v5
         with:
           fail_ci_if_error: true

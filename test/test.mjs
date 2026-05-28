@@ -1,4 +1,3 @@
-/* eslint-env mocha browser */
 import {assert} from "@open-wc/testing";
 import {compareSnapshot} from "@web/test-runner-commands";
 
@@ -200,4 +199,23 @@ describe("Linkifier", () => {
     });
   });
 
+  it("onlink", async () => {
+    body.innerHTML = "example.com";
+    let link;
+    await linkify(body, {
+      matcher,
+      onlink: ({link: _link}) => {
+        link = _link;
+      }
+    });
+    assert.equal(link.href, "http://example.com/");
+  });
+
+  it("onlink is null", async () => {
+    body.innerHTML = "example.com";
+    await linkify(body, {
+      matcher,
+      onlink: null
+    });
+  });
 });

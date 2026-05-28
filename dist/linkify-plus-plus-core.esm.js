@@ -1936,8 +1936,6 @@ function EventLite() {
 
 // })(EventLite);
 
-/* eslint-env browser */
-
 const {IMAGE} = _require__$rx_;
 
 var INVALID_TAGS = {
@@ -2178,9 +2176,9 @@ function linkify(...args) {
 		var linkifier = new Linkifier(...args);
 		linkifier.on("error", reject);
 		linkifier.on("complete", resolve);
-		for (var key of Object.keys(linkifier.options)) {
-			if (key.startsWith("on")) {
-				linkifier.on(key.slice(2), linkifier.options[key]);
+		for (var [key, value] of Object.entries(linkifier.options)) {
+			if (key.startsWith("on") && value) {
+				linkifier.on(key.slice(2), value);
 			}
 		}
 		linkifier.start();

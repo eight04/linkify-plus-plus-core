@@ -1,4 +1,3 @@
-/* eslint-env node */
 const cheerio = require("cheerio");
 const punycode = require("punycode");
 	
