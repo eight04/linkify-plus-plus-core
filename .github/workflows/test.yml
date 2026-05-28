@@ -12,11 +12,11 @@ jobs:
       - uses: actions/setup-node@v3
         with:
           node-version: '24'
-      - run: rm -rf /home/runner/.cache/puppeteer
       - run: npm ci
-      # - run: node node_modules/puppeteer/install.mjs
-      #   env:
-      #     PUPPETEER_CACHE_DIR: /home/runner/.cache/puppeteer
+      - run: rm -rf /home/runner/.cache/puppeteer
+      - run: npx puppeteer browsers install chrome
+        env:
+          PUPPETEER_CACHE_DIR: /home/runner/.cache/puppeteer
       - run: npm test
       - uses: codecov/codecov-action@v5
         with:
