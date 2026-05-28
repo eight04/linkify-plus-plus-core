@@ -1,7 +1,8 @@
 name: test
-on: [push, pull_request]
-concurrency:
-  group: ${{ github.workflow }}-${{ github.ref }}
+on: [push]
+# on: [push, pull_request]
+# concurrency:
+#   group: ${{ github.workflow }}-${{ github.ref }}
 jobs:
   test:
     runs-on: ubuntu-latest
