@@ -1939,8 +1939,6 @@ var linkifyPlusPlusCore = (function (exports) {
 
   // })(EventLite);
 
-  /* eslint-env browser */
-
   const {IMAGE} = _require__$rx_;
 
   var INVALID_TAGS = {

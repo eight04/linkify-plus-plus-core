@@ -1,4 +1,3 @@
-/* eslint-env browser */
 /* globals Vue, linkifyPlusPlusCore */
 var {UrlMatcher, linkify} = linkifyPlusPlusCore;
 

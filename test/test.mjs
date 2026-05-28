@@ -1,4 +1,3 @@
-/* eslint-env mocha browser */
 import {assert} from "@open-wc/testing";
 import {compareSnapshot} from "@web/test-runner-commands";
 
