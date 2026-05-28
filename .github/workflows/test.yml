@@ -12,7 +12,7 @@ jobs:
           node-version: '24'
       - run: npm ci
       - run: npx puppeteer browsers install chrome
-      - run: npm run test-cover
+      - run: npm test
       - uses: codecov/codecov-action@v5
         with:
           fail_ci_if_error: true

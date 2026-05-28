@@ -36,8 +36,7 @@
   "scripts": {
     "build-tlds": "node build-tlds.js > lib/tlds.json",
     "build": "rollup -c",
-    "test": "eslint . && npm run build && web-test-runner test/*",
-    "test-cover": "npm test -- --coverage",
+    "test": "eslint . && npm run build && web-test-runner test/* --coverage",
     "preversion": "npm test",
     "version": "npm run build && git add .",
     "postversion": "git push --follow-tags && npm publish"

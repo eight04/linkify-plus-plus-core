@@ -7,7 +7,8 @@ export default [
     ignores: [
       "dist",
       "dist-extension",
-      "**/__snapshots__/*.js"
+      "**/__snapshots__/*.js",
+      "coverage"
     ]
   },
   js.configs.recommended,

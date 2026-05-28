@@ -14,16 +14,16 @@ export default {
     puppeteerLauncher({
       launchOptions
     }),
-  ]
+  ],
   // browsers: [
   //   playwrightLauncher({product: 'firefox'}),
   // ]
   // FIXME: https://github.com/modernweb-dev/web/issues/2637
-  // coverageConfig: {
-  //   exclude: [
-  //     "node_modules/**/*",
-  //   ]
-  // }
+  coverageConfig: {
+    // exclude: [
+    //   "node_modules/**/*",
+    // ]
+  }
   // FIXME: https://github.com/modernweb-dev/web/issues/2640
   // plugins: [
   //   [cjs, { nested: true, cache: false, include: ["lib/**/*"]}]
