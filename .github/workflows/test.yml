@@ -13,6 +13,7 @@ jobs:
         with:
           node-version: '24'
       - run: npm ci
+      - run: rm -rf ~/.cache/puppeteer
       - run: npx puppeteer browsers install chrome
       - run: npm test
       - uses: codecov/codecov-action@v5
