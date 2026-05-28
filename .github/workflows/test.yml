@@ -1,8 +1,6 @@
 name: test
-# on: [push]
 on: [push, pull_request]
-# concurrency:
-#   group: ${{ github.workflow }}-${{ github.ref }}
+
 jobs:
   test:
     runs-on: ubuntu-latest
@@ -12,11 +10,7 @@ jobs:
       - uses: actions/setup-node@v6
         with:
           node-version: '24'
-      - run: npm ci
-      # - run: rm -rf /home/runner/.cache/puppeteer
-      # - run: npx puppeteer browsers install chrome
-      #   env:
-      #     PUPPETEER_CACHE_DIR: /home/runner/.cache/puppeteer
+      - run: npm install
       - run: npm test
       - uses: codecov/codecov-action@v5
         with:
