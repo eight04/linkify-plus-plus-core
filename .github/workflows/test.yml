@@ -13,9 +13,9 @@ jobs:
         with:
           node-version: '24'
       - run: npm ci
+      - run: npx puppeteer browsers install chrome
         env:
           PUPPETEER_CACHE_DIR: /home/runner/.cache/puppeteer
-      # - run: npx puppeteer browsers install chrome
       - run: npm test
       - uses: codecov/codecov-action@v5
         with:
