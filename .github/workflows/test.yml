@@ -12,7 +12,7 @@ jobs:
       - uses: actions/setup-node@v6
         with:
           node-version: '24'
-      - run: npm install
+      - run: npm ci
       # - run: rm -rf /home/runner/.cache/puppeteer
       # - run: npx puppeteer browsers install chrome
       #   env:
