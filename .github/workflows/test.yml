@@ -13,7 +13,7 @@ jobs:
         with:
           node-version: '24'
       - run: npm ci
-      - run: npx puppeteer browsers install chrome
+      - run: node node_modules/puppeteer/install.mjs
         env:
           PUPPETEER_CACHE_DIR: /home/runner/.cache/puppeteer
       - run: npm test
