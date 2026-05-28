@@ -1,10 +1,10 @@
 name: test
 on: [push, pull_request]
 
-concurrency:
-  group: test
-  queue: max
-
+# concurrency:
+#   group: test
+#   queue: max
+#
 jobs:
   test:
     runs-on: ubuntu-latest
@@ -14,7 +14,9 @@ jobs:
       - uses: actions/setup-node@v6
         with:
           node-version: '24'
-      - run: npm ci
+      # FIXME: run npm ci in parallel on Github action breaks puppeteer with `Could not find Chrome` error. Something to do with the cache?
+      # - run: npm ci
+      - run: npm install
       - run: npm test
       - uses: codecov/codecov-action@v5
         with:
