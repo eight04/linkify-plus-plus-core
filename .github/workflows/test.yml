@@ -8,15 +8,15 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v3
-      - uses: actions/setup-node@v3
+      - uses: actions/checkout@v6
+      - uses: actions/setup-node@v6
         with:
           node-version: '24'
-      - run: npm ci
-      - run: rm -rf /home/runner/.cache/puppeteer
-      - run: npx puppeteer browsers install chrome
-        env:
-          PUPPETEER_CACHE_DIR: /home/runner/.cache/puppeteer
+      - run: npm install
+      # - run: rm -rf /home/runner/.cache/puppeteer
+      # - run: npx puppeteer browsers install chrome
+      #   env:
+      #     PUPPETEER_CACHE_DIR: /home/runner/.cache/puppeteer
       - run: npm test
       - uses: codecov/codecov-action@v5
         with:
